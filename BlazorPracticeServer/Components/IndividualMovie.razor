@@ -1,0 +1,12 @@
+﻿<div>
+    <p> <b>Title</b> : @((MarkupString)Movie.Title)</p>
+    <p> <b>Release Date</b> :  @Movie.ReleaseDate.ToString("dd MMM yyyy")</p>
+    @if (DisplayDeleteButtons)
+    {
+        <div>
+            @* Delete / Edit Button *@
+            <BSButton Color="Color.Primary" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
+            <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
+        </div>
+    }
+</div>
