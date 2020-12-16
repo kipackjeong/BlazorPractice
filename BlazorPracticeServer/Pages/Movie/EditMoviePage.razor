@@ -1,0 +1,9 @@
+﻿@page "/movie/edit/{MovieId:int}"
+@page "/movie/edit/{MovieId:int}/{MovieTitle}"
+
+<h3>EditMoviePage</h3>
+
+@code {
+    [Parameter]
+    public int MovieId { get; set; }
+}

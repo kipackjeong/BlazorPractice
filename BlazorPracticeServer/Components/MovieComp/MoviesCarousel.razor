@@ -1,0 +1,12 @@
+﻿<BlazorPracticeServer.Components.Generic.GenericSpinner List="Movies">
+    <ChildContent Context="movie">
+        <IndividualMovie Movie="movie" DisplayButtons="false">
+        </IndividualMovie>
+    </ChildContent>
+</BlazorPracticeServer.Components.Generic.GenericSpinner>
+
+@code {
+    [Parameter]
+    public List<Movie> Movies { get; set; }
+}
+

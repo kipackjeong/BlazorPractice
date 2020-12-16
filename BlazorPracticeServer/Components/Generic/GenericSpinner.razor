@@ -1,0 +1,20 @@
+﻿@typeparam TItem
+
+
+<div id="carousel">
+    <figure id="spinner">
+        @foreach (var element in List)
+        {
+            @ChildContent(element)
+        }
+    </figure>
+</div>
+<span style="float:left" class="ss-icon" onclick="galleryspin('-')">&lt;</span>
+<span style="float:right" class="ss-icon" onclick="galleryspin('')">&gt;</span>
+
+@code {
+    [Parameter]
+    public List<TItem> List { get; set; }
+    [Parameter]
+    public RenderFragment<TItem> ChildContent { get; set; }
+}

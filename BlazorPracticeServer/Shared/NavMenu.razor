@@ -1,32 +1,30 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">BlazorPracticeServer</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿@inject IJSRuntime JSRuntime
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+<nav class="navbar @NavMenuCssClass">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <NavLink href="" Match="NavLinkMatch.All">
+                <text id="len1" class="hoverable">Movies</text>
             </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="EtcPage">
-                <span class="oi oi-plus" aria-hidden="true"></span> EtcPage
+
+            <NavLink href="genre">
+                <text id="len2" class="hoverable">Genres</text>
             </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="movies">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Movies
+
+            <NavLink href="people">
+                <text id="len3" class="hoverable">People</text>
             </NavLink>
-        </li>
-    </ul>
-</div>
+
+            <NavLink href="movie/create">
+                <text id="len4" class="hoverable">Create Movie</text>
+            </NavLink>
+        </ul>
+    </div>
+</nav>
+
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool collapseNavMenu = false;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

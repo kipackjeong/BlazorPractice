@@ -1,9 +1,0 @@
-﻿/*Individual css takes predesence over global css*/
-
-body {
-}
-
-h1 {
-    font-size: 2rem;
-    color: royalblue;
-}

@@ -1,5 +1,5 @@
-﻿using BlazorPracticeServer.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BlazorPracticeServer.Entity;
 
 namespace BlazorPracticeServer.Data
 {

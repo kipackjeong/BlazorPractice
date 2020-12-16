@@ -29,20 +29,17 @@ else if (List.Count == 0)
     }
 }
 
-
 else
 {
-    <EditForm Model="@List">
-        @foreach (var element in List)
-        {
-            @ElementTemplate(element)
-        }
-    </EditForm>
+    @foreach (var element in List)
+    {
+        @ChildContent(element)
+    }
 }
 
 @code{
     [Parameter] public RenderFragment NullTemplate { get; set; }
     [Parameter] public RenderFragment EmptyTemplate { get; set; }
-    [Parameter] public RenderFragment<TItem> ElementTemplate { get; set; }
+    [Parameter] public RenderFragment<TItem> ChildContent { get; set; }
     [Parameter] public List<TItem> List { get; set; }
 }

@@ -1,0 +1,30 @@
+﻿@page "/genre/edit/{GenreId:int}"
+@page "/genre/edit/{GenreId:int}/GenreName"
+@using BlazorPracticeServer.Components.GenreComp 
+
+@if (Genre != null)
+{
+    <h3f>@Test</h3f>
+    <GenreForm Genre="Genre" OnValidSubmit="Edit">
+    </GenreForm>
+}
+
+
+@code {
+    [Parameter]
+    public int GenreId { get; set; }
+
+    public Genre Genre { get; set; } = new Genre();
+
+    public string Test { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Genre = new Genre() {Id = GenreId, Name = "Comedy"};
+    }
+
+    private void Edit()
+    {
+        Test = Genre.Name;
+    }
+}

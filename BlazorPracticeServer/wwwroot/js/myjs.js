@@ -1,14 +1,8 @@
-﻿function functionName(message) {
-    console.log("from my js" + message)
-}
-
-function dotnetStaticInvocation() {
-    DotNet.invokeMethodAsync("BlazorPracticeServer", "GetCurrentCount")
-        .then(result => { // when c# method has a return value you use .them(result=>{something})
-            console.log("count from javascript" + result)
-        });
-}
-
-function dotnetInstanceInvocation(dotnetHelper) {
-    dotnetHelper.invokeMethodAsync("IncrementCount");
+﻿
+//carousel spin
+var angle = 0;
+function galleryspin(sign) {
+    spinner = document.querySelector("#spinner");
+    if (!sign) { angle = angle + 45; } else { angle = angle - 45; }
+    spinner.setAttribute("style", "-webkit-transform: rotateY(" + angle + "deg); -moz-transform: rotateY(" + angle + "deg); transform: rotateY(" + angle + "deg);");
 }

@@ -1,0 +1,38 @@
+﻿<div class="individual-movie-container">
+    <a class="movie-poster-cont" href="@movieURL ">
+        <img src="@Movie.Poster" alt="Poster" class="movie-poster" />
+    </a>
+    <p style="color: white">
+        <a href="@movieURL">
+            <b>@Movie.TitleBrief</b> <br />
+            <b>Release Date</b><br />
+            : @Movie.ReleaseDate.ToString("dd MMM yyyy")
+        </a>
+
+    </p>
+    <br />
+    @if (DisplayButtons)
+    {
+        <div class="button-group" style="position:relative">
+            <BSButton Color="Color.Info" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
+            <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
+        </div>
+    }
+
+</div>
+@code{
+    [Parameter]
+    public Movie Movie { get; set; }
+    [Parameter]
+    public bool DisplayButtons { get; set; }
+    // event callback, bring the method from parent component, and on certain condition, invoke it.
+    [Parameter] public EventCallback<Movie> DeleteMoviePrompt { get; set; }
+    [Parameter] public EventCallback<Movie> EditMoviePrompt { get; set; }
+
+    private string movieURL = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        movieURL = $"movie/detail/{Movie.Id}/{Movie.Title.Replace(" ","-")}";
+    }
+}
