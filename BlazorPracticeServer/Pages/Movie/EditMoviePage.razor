@@ -1,9 +1,29 @@
 ﻿@page "/movie/edit/{MovieId:int}"
 @page "/movie/edit/{MovieId:int}/{MovieTitle}"
+@inject IRepository Repository
+@using BlazorPracticeServer.Components.MovieComp 
+
 
 <h3>EditMoviePage</h3>
+
+<MovieForm Movie="_movie" Genres="Repository.Genres">
+</MovieForm>
+
+
 
 @code {
     [Parameter]
     public int MovieId { get; set; }
+    [Parameter]
+    public string MovieTitle { get; set; }
+
+    private Movie _movie { get; set; } = new Movie();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        _movie = Repository.Movies.FirstOrDefault(m => m.Id == MovieId);
+    }
 }

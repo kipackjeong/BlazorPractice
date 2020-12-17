@@ -18,10 +18,9 @@
 </div>
 
 @* Movies List *@
-<div id="movies-list">
-    <MoviesList Movies="_movies">
-    </MoviesList>
-</div>
+<MoviesList Movies="_movies">
+</MoviesList>
+
 
 @code{
     [Inject] public IRepository Repository { get; set; }
@@ -31,6 +30,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        _movies = Repository.GetMovies();
+        _movies = Repository.Movies;
     }
 }

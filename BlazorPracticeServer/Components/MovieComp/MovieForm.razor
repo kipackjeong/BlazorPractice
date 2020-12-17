@@ -1,0 +1,45 @@
+﻿@inject NavigationManager NavigationManager
+ 
+<EditForm Model="Movie" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        
+        <div>
+            <InputText @bind-Value="@Movie.Title">
+                <label>Name: </label>
+            </InputText>
+            <ValidationMessage For="@(()=> Movie.Title)" />
+            <InputDate @bind-Value="@Movie.ReleaseDate" />
+            <ValidationMessage For="@(()=> Movie.ReleaseDate)" />
+            <InputSelect style="height:100%" @bind-Value="@_selectedGenre">
+                <option value="0"> -- Select Genre </option>
+                @foreach (var genre in Genres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=> Movie.Genre)" />
+        </div>
+    </div>
+
+    <button class="btn btn-success" type="submit"> Save Changes </button>
+</EditForm>
+@code {
+
+    [Parameter]
+    public Movie Movie { get; set; }
+    [Parameter]
+    public List<Genre> Genres { get; set; }
+
+    private string _selectedGenre = string.Empty;
+
+    private void OnValidSubmit()
+    {
+        if (_selectedGenre != "0")
+        {
+            Movie.Genre = Genres.FirstOrDefault(g => g.Id == int.Parse(_selectedGenre));
+        }
+        StateHasChanged();
+        NavigationManager.NavigateTo("/");
+    }
+}

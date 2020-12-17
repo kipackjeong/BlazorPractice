@@ -1,22 +1,23 @@
 ﻿<div class="individual-movie-container">
-    <a class="movie-poster-cont" href="@movieURL ">
+    <a class="movie-poster-cont" href="@_movieURL ">
         <img src="@Movie.Poster" alt="Poster" class="movie-poster" />
     </a>
     <p style="color: white">
-        <a href="@movieURL">
-            <b>@Movie.TitleBrief</b> <br />
+        <a href="@_movieURL">
+            <b>@_briefTitle</b> <br />
             <b>Release Date</b><br />
-            : @Movie.ReleaseDate.ToString("dd MMM yyyy")
+            : @Movie.ReleaseDate.ToString("dd MMM yyyy")<br />
+            <b>@Movie.Genre.Name</b><br />
         </a>
 
     </p>
     <br />
     @if (DisplayButtons)
     {
-        <div class="button-group" style="position:relative">
+        @*<div class="button-group" style="position: relative; margin-top: 30px">
             <BSButton Color="Color.Info" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
             <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
-        </div>
+        </div>*@
     }
 
 </div>
@@ -29,10 +30,16 @@
     [Parameter] public EventCallback<Movie> DeleteMoviePrompt { get; set; }
     [Parameter] public EventCallback<Movie> EditMoviePrompt { get; set; }
 
-    private string movieURL = string.Empty;
+    private string _briefTitle = string.Empty;
+
+    private string _movieURL = string.Empty;
 
     protected override void OnInitialized()
     {
-        movieURL = $"movie/detail/{Movie.Id}/{Movie.Title.Replace(" ","-")}";
+        _movieURL = $"movie/detail/{Movie.Id}/{Movie.Title.Replace(" ", "-")}";
+    }
+    protected override void OnParametersSet()
+    {
+        _briefTitle = Movie.Title.Length < 10 ? Movie.Title : Movie.Title.Substring(0,10);
     }
 }

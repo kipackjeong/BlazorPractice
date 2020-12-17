@@ -9,6 +9,8 @@ namespace BlazorPracticeServer.Entity
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
+        [Required] 
+        public Genre Genre { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Poster { get; set; }
 
