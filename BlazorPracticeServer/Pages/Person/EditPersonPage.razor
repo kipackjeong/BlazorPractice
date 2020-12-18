@@ -1,7 +1,26 @@
-﻿@page "/person/edit/{PersonId}"
+﻿@page "/person/edit/{PersonId:int}"
+@using BlazorPracticeServer.Components.PersonComp
 <h3>EditPersonPage</h3>
+
+@if (Person != null)
+{
+    <PersonForm Person="Person" OnValidSubmit="EditPerson"></PersonForm>
+}
+
 
 @code {
     [Parameter]
     public int PersonId { get; set; }
+
+    public Person Person { get; set; } = new Person();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Person = new Person() {Id = 1, Name = "Kipack", DateOfBirth = DateTime.Today, Biography = "something"};
+    }
+
+    private void EditPerson()
+    {
+        Console.WriteLine("Editing Person...");
+    }
 }

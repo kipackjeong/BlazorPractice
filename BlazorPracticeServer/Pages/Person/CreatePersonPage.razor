@@ -1,7 +1,17 @@
 ﻿@page "/person/create" 
+@using BlazorPracticeServer.Components.PersonComp
 
 <h3>CreatePersonPage</h3>
+<PersonForm Person="Person" OnValidSubmit="CreatePerson">
+</PersonForm>
+
 
 @code {
+    Person Person = new Person();
+
+    private void CreatePerson()
+    {
+        Console.WriteLine("Created a person");
+    }
 
 }

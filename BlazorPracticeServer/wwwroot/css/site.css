@@ -61,6 +61,8 @@ h1, h2, h3 {
         top: 0.5rem;
     }
 
+/*#region Carousel */
+
 div#carousel {
     perspective: 1200px;
     background: #100000;
@@ -135,7 +137,32 @@ div#carousel ~ span {
         color: #888;
         cursor: pointer;
     }
+
+/*#endregion */
+
 #movies-list {
     display: flex;
     flex-wrap: wrap;
 }
+
+
+/*#region Markdown */
+
+.form-markdown {
+    display: flex;
+}
+
+    .form-markdown textarea {
+        width: 500px;
+        height: 500px;
+        margin-right: 15px;
+    }
+
+    .form-markdown .markdown-container {
+        color: white;
+        border: 1px dashed rgb(255, 255, 255);
+        width: 500px;
+        height: 500px;
+    }
+
+/*#endregion */

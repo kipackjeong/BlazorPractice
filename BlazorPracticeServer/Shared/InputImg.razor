@@ -1,0 +1,62 @@
+﻿@* FILE INPUT *@
+<div>
+    <label>@Label </label>
+    <div>
+        <InputFile accept=".jpg,.jpeg,.png" OnChange="OnChange" />
+    </div>
+</div>
+
+@* DISPLAY IMAGE *@
+<div>
+    @* updated image *@
+    @if (_imageBase64 != null)
+    {
+        <div>
+            <div style="margin: 10px">
+                <img src="data:image/jpeg;base64, @_imageBase64" style="width: 400px"/>
+            </div>
+        </div>
+    }
+
+    @* original image *@
+    @if (ImageURL != null)
+    {
+        <div>
+            <div style="margin: 10px">
+                <img src="@ImageURL" style="width: 400px"/>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; } = "Image";
+    [Parameter]
+    public EventCallback<string> OnSelectedImage { get; set; }
+    [Parameter]
+    public string ImageURL { get; set; }
+
+    private string _imageBase64;
+
+    async Task OnChange(InputFileChangeEventArgs e)
+    {
+        var imagesFiles = e.GetMultipleFiles();
+
+        foreach (var imageFile in imagesFiles)
+        {
+            var buffer = new byte[imageFile.Size];
+            await imageFile.OpenReadStream().ReadAsync(buffer);
+            _imageBase64 = Convert.ToBase64String(buffer);
+
+            // once user selected new image, hide the previous one.
+            ImageURL = null;
+
+            await OnSelectedImage.InvokeAsync(_imageBase64);
+
+            StateHasChanged();
+        }
+    }
+}
