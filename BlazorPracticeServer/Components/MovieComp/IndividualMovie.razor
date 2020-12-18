@@ -7,16 +7,16 @@
             <b>@_briefTitle</b> <br />
             <b>Release Date</b><br />
             : @Movie.ReleaseDate.ToString("dd MMM yyyy")<br />
-            <b>@Movie.Genre.Name</b><br />
+            <b> @Movie.Genre</b>
         </a>
     </p>
     <br />
     @if (DisplayButtons)
     {
         @*<div class="button-group" style="position: relative; margin-top: 30px">
-            <BSButton Color="Color.Info" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
-            <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
-        </div>*@
+                <BSButton Color="Color.Info" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
+                <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
+            </div>*@
     }
 
 </div>
@@ -39,6 +39,7 @@
     }
     protected override void OnParametersSet()
     {
-        _briefTitle = Movie.Title.Length < 10 ? Movie.Title : Movie.Title.Substring(0,10);
+        // shorten the title that has length over 10
+        _briefTitle = Movie.Title.Length < 10 ? Movie.Title : Movie.Title.Substring(0, 10);
     }
 }

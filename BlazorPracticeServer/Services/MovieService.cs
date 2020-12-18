@@ -8,5 +8,6 @@ namespace BlazorPracticeServer.Services
     public class MovieService : IMovieService
     {
         //TODO 2: Implement MovieService
+
     }
 }

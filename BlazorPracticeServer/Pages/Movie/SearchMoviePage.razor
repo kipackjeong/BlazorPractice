@@ -90,11 +90,10 @@ else
         }
         else
         {
-            SearchedMovies = AllMovies.FindAll(m =>
-            m.Title.Length >= title.Length
-            && m.Title.ToLower().Substring(0, title.Length) == title.ToLower()
-            && m.Genre.Id == int.Parse(selectedGenre)
-            );
+            SearchedMovies = AllMovies.Where(m =>
+                m.Title.Length >= title.Length
+                && m.Title.Contains(title)
+            ).ToList();
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using BlazorPracticeServer.Brokers.Api;
 using BlazorPracticeServer.Data;
 using BlazorPracticeServer.Models.Configuration;
+using BlazorPracticeServer.Services;
 using BlazorStrap;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,8 @@ namespace BlazorPracticeServer
             services.AddServerSideBlazor();
 
             services.AddSingleton<IRepository, MockRepository>();
-            
+
+            services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IApiBroker, ApiBroker>();
 
             services.AddHttpClient<IApiBroker, ApiBroker>(client =>
