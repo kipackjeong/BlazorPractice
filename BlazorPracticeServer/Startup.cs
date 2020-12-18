@@ -1,10 +1,14 @@
+using System;
+using BlazorPracticeServer.Brokers.Api;
 using BlazorPracticeServer.Data;
+using BlazorPracticeServer.Models.Configuration;
 using BlazorStrap;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RESTFulSense.Clients;
 
 namespace BlazorPracticeServer
 {
@@ -22,13 +26,21 @@ namespace BlazorPracticeServer
             //add blazorstrap
             services.AddBootstrapCss();
 
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
             services.AddSingleton<IRepository, MockRepository>();
+            
+            services.AddScoped<IApiBroker, ApiBroker>();
 
-
+            services.AddHttpClient<IApiBroker, ApiBroker>(client =>
+                client.BaseAddress = new Uri("https://localhost:44322/"));
+            services.AddHttpClient<IRESTFulApiFactoryClient, RESTFulApiFactoryClient>(client =>
+            {
+                LocalConfigurations localConfigurations = Configuration.Get<LocalConfigurations>();
+                string apiUrl = localConfigurations.ApiConfigurations.Url;
+                client.BaseAddress = new Uri(apiUrl);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

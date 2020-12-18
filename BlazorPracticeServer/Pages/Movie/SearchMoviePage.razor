@@ -7,11 +7,11 @@
     <div class="form-group mb-2">
         <label for="title" class="sr-only"> Title</label>
         <input type="text" class="form-control" id="title" placeholder="Movie Title"
-               @bind-value="title" @bind-value:event="oninput"
-               @onkeypress="@((KeyboardEventArgs e)=> TitleKeyPress(e))" />
+               @bind-value="@title" @bind-value:event="oninput"
+               @onkeypress="@TitleKeyPress" />
     </div>
+
     <div class="form-group mx-sm-3 mb-2">
-        <h2>@selectedGenre </h2>
         <select class="form-control" @bind="selectedGenre">
             <option value="0">
                 --Select a Genre
@@ -22,6 +22,7 @@
             }
         </select>
     </div>
+
     <div class="form-group mx-sm-3 mb-2">
         <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="upcomingReleases" />
         <label class="form-check-label" for="upcomingReleases">
@@ -34,12 +35,16 @@
             Upcoming Releases
         </label>
     </div>
-    <BSButton Color="@Color.Light" @onclick="@SearchForMovies">Filter</BSButton>
-    <BSButton Color="@Color.Light" @onclick="@Clear">Clear</BSButton>
 </div>
-@if (SearchedMovies.Count == 0 || SearchedMovies == null)
+<BSButton Color="@Color.Light" @onclick="@SearchForMovies">Filter</BSButton>
+<BSButton Color="@Color.Light" @onclick="@Clear">Clear</BSButton>
+@if (title.Length == 0)
 {
-    <p> No movie found </p>
+    <MoviesList Movies="AllMovies"></MoviesList>
+}
+@if (SearchedMovies == null)
+{
+    <h3> No movie found </h3>
 }
 else
 {
@@ -52,35 +57,45 @@ else
     string selectedGenre = "0";
     bool upcomingReleases = false;
     bool inTheaters = false;
-
+    public MoviesList movieList;
     private Genre _genre = new Genre();
+    private List<Movie> AllMovies { get; set; } = new List<Movie>();
     private List<Movie> SearchedMovies { get; set; } = new List<Movie>();
     private List<Genre> _genres { get; set; } = new List<Genre>();
 
     protected override void OnInitialized()
     {
         _genres = Repository.Genres;
-
+        AllMovies = Repository.Movies;
     }
 
-
-    private void TitleKeyPress(KeyboardEventArgs e)
+    private void TitleKeyPress()
     {
-        if (e.Key == "Enter")
-        {
-            // ...
-        }
+        SearchForMovies();
     }
 
     private void SearchForMovies()
     {
-        int searchInputLength = title.Length;
+        if (title == string.Empty)
+        {
+            return;
+        }
 
-        SearchedMovies = Repository.Movies.FindAll(m =>
-            m.Title.ToLower().Substring(0, searchInputLength) == title.ToLower().Substring(0, searchInputLength)
-                                                        && m.Genre.Id == int.Parse(selectedGenre)
+        if (selectedGenre == "0")
+        {
+            SearchedMovies = AllMovies.FindAll(m =>
+        m.Title.Length >= title.Length
+        && m.Title.ToLower().Substring(0, title.Length) == title.ToLower()
+    );
+        }
+        else
+        {
+            SearchedMovies = AllMovies.FindAll(m =>
+            m.Title.Length >= title.Length
+            && m.Title.ToLower().Substring(0, title.Length) == title.ToLower()
+            && m.Genre.Id == int.Parse(selectedGenre)
             );
-        StateHasChanged();
+        }
     }
 
     private void Clear()
@@ -89,6 +104,5 @@ else
         selectedGenre = string.Empty;
         upcomingReleases = false;
         inTheaters = false;
-        StateHasChanged();
     }
 }

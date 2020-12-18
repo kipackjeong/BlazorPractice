@@ -9,6 +9,6 @@ namespace BlazorPracticeServer.Entity
         public int Id { get; set; }
         [Required(ErrorMessage = "This field is required")]
         public string Name { get; set; }
-        public List<Movie> Movies { get; set; }
+        public ICollection<MovieGenre> MovieGenres { get; set; }
     }
 }

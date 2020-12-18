@@ -1,7 +1,25 @@
 ﻿@page "/movie/detail/{MovieId:int}"
 @page "/movie/detail/{MovieId:int}/{MovieTitle}"
+@inject IRepository Repository
 
-<h3>DetailsMovie</h3>
+<div style=" width: 100%; display: inline-flex; flex-direction:row; justify-content:space-around">
+    <div>
+        <img style="width: 400px; height:600px" src="@_movie.Poster" alt="Poster" class="movie-poster" />
+    </div>
+    <div>
+        <h3>@_movie.Title</h3>
+        <h3>@_movie.ReleaseDate</h3>
+        <h3>@_movie.Genre.Name</h3>
+    </div>
+
+</div>
+<div style="margin:auto">
+    <div>
+        <h3>Casting</h3>
+        <h3>Screenshots</h3>
+        <h3>Review</h3>
+    </div>
+</div>
 
 @code {
     [Parameter]
@@ -9,8 +27,10 @@
     [Parameter]
     public string MovieTitle { get; set; }
 
-    protected override void OnInitialized()
+    private Movie _movie = new Movie();
+
+    protected async override Task OnInitializedAsync()
     {
-        Console.WriteLine($"Movie Id is {MovieId}");
+        _movie = Repository.Movies.FirstOrDefault(m => m.Id == MovieId);
     }
 }

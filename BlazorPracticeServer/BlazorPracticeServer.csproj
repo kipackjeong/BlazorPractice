@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>c9f135e6-64e3-4254-b5aa-52560ffed0bd</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="BlazorStrap" Version="1.5.0-preview-02" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="RESTFulSense" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>
