@@ -1,18 +1,18 @@
 ﻿@page "/movie/create"
 @inject NavigationManager NavigationManager
+@inject IRepository Repository  
 
+<MovieForm Movie="Movie" OnValidSubmit="@(()=>CreateMovie(Movie))"/>
 
-
-<h3>CreateMoviePage</h3>
-
-<button class="btn btn-primary" @onclick="@CreateMovie">Save Movie</button>
 @code {
+    public Movie Movie { get; set; } = new Movie();
 
-    private void CreateMovie()
+
+
+    private void CreateMovie(Movie movie)
     {
         // saving movie..
-
-
-        NavigationManager.NavigateTo("");
+        Repository.Movies.Add(movie);
+        NavigationManager.NavigateTo("/");
     }
 }

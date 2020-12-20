@@ -6,7 +6,7 @@
 
 <h3>EditMoviePage</h3>
 
-<MovieForm Movie="_movie" Genres="Repository.Genres">
+<MovieForm Movie="_movie" OnValidSubmit="EditMovie">
 </MovieForm>
 
 
@@ -19,11 +19,12 @@
 
     private Movie _movie { get; set; } = new Movie();
 
-    protected override async Task OnInitializedAsync()
-    {
-    }
-    protected override async Task OnParametersSetAsync()
-    {
+    protected override async Task OnInitializedAsync() =>
         _movie = Repository.Movies.FirstOrDefault(m => m.Id == MovieId);
+
+
+    private async Task EditMovie()
+    {
+        Console.WriteLine("Movie Edited");
     }
 }

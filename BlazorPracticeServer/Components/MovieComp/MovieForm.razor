@@ -1,26 +1,61 @@
-﻿@inject NavigationManager NavigationManager
- 
+﻿@using BlazorPracticeServer.Models
+@inject NavigationManager NavigationManager
+@inject IRepository Repository
+
 <EditForm Model="Movie" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
+
     <div class="form-group">
-        
+        <label>Title:</label>
         <div>
-            <InputText @bind-Value="@Movie.Title">
-                <label>Name: </label>
+            <InputText class="form-control" @bind-Value="Movie.Title">
             </InputText>
-            <ValidationMessage For="@(()=> Movie.Title)" />
-            <InputDate @bind-Value="@Movie.ReleaseDate" />
-            <ValidationMessage For="@(()=> Movie.ReleaseDate)" />
-            <InputSelect style="height:100%" @bind-Value="@_selectedGenre">
-                <option value="0"> -- Select Genre </option>
-                @foreach (var genre in Genres)
-                {
-                    <option value="@genre.Id">@genre.Name</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(()=> Movie.Genre)" />
+            <ValidationMessage For="@(() => Movie.Title)" />
         </div>
     </div>
+
+    <div class="form-group">
+        <label>In Theaters</label>
+        <div>
+            <InputCheckbox class="form-control" @bind-Value="Movie.InTheater" />
+            <ValidationMessage For="@(() => Movie.InTheater)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Trailer:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="Movie.Trailer" />
+            <ValidationMessage For="@(()=> Movie.Trailer)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Release Date</label>
+        <div>
+            <InputDate @bind-Value="Movie.ReleaseDate" />
+            <ValidationMessage For="@(()=> Movie.ReleaseDate)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Poster</label>
+        <InputImg ImageURL="@_imageUrl" OnSelectedImage="PosterSelected" />
+    </div>
+
+    <!-- #region Summary -->
+    <div class="form-group form-markdown">
+        <InputMarkdown @bind-Value="Movie.Summary"
+                       Label="Summary"
+                       For="@(() => Movie.Summary)" />
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Genre MultiSelector -->
+    <MultipleSelector NotSelected="NotSelectedGenres" Selected="SelectedGenres">
+    </MultipleSelector>
+    <!-- #endregion -->
+
 
     <button class="btn btn-success" type="submit"> Save Changes </button>
 </EditForm>
@@ -29,17 +64,52 @@
     [Parameter]
     public Movie Movie { get; set; }
     [Parameter]
-    public List<Genre> Genres { get; set; }
+    public EventCallback OnValidSubmit { get; set; }
 
+    private List<MultipleSelectorModel> SelectedGenres { get; set; } = new List<MultipleSelectorModel>();
+    private List<MultipleSelectorModel> NotSelectedGenres { get; set; } = new List<MultipleSelectorModel>();
+
+    public List<Genre> Genres { get; set; } = new List<Genre>();
     private string _selectedGenre = string.Empty;
+    private string _imageUrl { get; set; }
 
-    private void OnValidSubmit()
+    protected override void OnInitialized()
     {
-        if (_selectedGenre != "0")
-        {
-            Movie.Genre = Genres.FirstOrDefault(g => g.Id == int.Parse(_selectedGenre));
+        if (!string.IsNullOrEmpty(Movie.Poster))
+            _imageUrl = Movie.Poster;
+
+        #region Movie Genre Selected/NotSelected
+        if (Movie.MovieGenres != null)
+        {   // in edit page
+            SelectedGenres =
+                Movie.MovieGenres
+                    .Select(x => new MultipleSelectorModel(x.GenreId.ToString(), x.Genre.Name))
+                    .ToList();
+
+            var selectedGenres =
+                Movie.MovieGenres
+                    .Select(x => x.Genre)
+                    .ToList();
+
+            NotSelectedGenres =
+                Repository.Genres
+                    .Where(g => !selectedGenres.Contains(g))
+                    .Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name))
+                    .ToList();
         }
-        StateHasChanged();
-        NavigationManager.NavigateTo("/");
+        else
+        {   // in create page
+            NotSelectedGenres =
+                Repository.Genres
+                    .Select(g => new MultipleSelectorModel(g.Id.ToString(), g.Name))
+                    .ToList();
+        }
+        #endregion
+    }
+
+    private void PosterSelected(string movieUrl)
+    {
+        Movie.Poster = movieUrl;
+        _imageUrl = null;
     }
 }
