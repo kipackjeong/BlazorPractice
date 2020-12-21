@@ -7,21 +7,20 @@ using BlazorPracticeServer.Entity;
 
 namespace BlazorPracticeServer.Services
 {
-    public class MovieService : IMovieService
+    public class GenreService : IGenreService
     {
-        //TODO 2: Implement MovieService
         private readonly IApiBroker apiBroker;
 
 
-        public MovieService(
+        public GenreService(
             IApiBroker apiBroker)
         {
             this.apiBroker = apiBroker;
         }
 
-        public async ValueTask<IEnumerable<Movie>> RetrieveAllMovieAsync() =>
-            await apiBroker.GetAllMovieAsync();
-        public async ValueTask<Movie> RegisterMovieAsync(Movie movie) => 
-            await this.apiBroker.PostMovieAsync(movie);
+        public async ValueTask<IEnumerable<Genre>> RetrieveAllMovieAsync() =>
+            await apiBroker.GetAllGenresAsync();
+        public async ValueTask<Genre> RegisterMovieAsync(Genre movie) =>
+            await this.apiBroker.PostGenreAsync(movie);
     }
 }

@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+using BlazorPracticeServer.Entity;
 
-namespace BlazorPracticeServer.Entity
+namespace BlazorPractice.Api.Dto.Genre
 {
-    public class Genre
+    public class CreateGenreDto
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "This field is required")]
         public string Name { get; set; }
         public ICollection<MovieGenre> MovieGenres { get; set; }

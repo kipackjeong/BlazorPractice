@@ -7,39 +7,37 @@ using BlazorPracticeServer.Entity;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
-    public class MovieRepository : IMovieRepository
+    public class GenreRepository : IGenreRepository
     {
         private readonly AppDbContext _context;
 
-        public MovieRepository(AppDbContext context)
+        public GenreRepository(AppDbContext context)
         {
             _context = context;
         }
-
-
-        public IEnumerable<Movie> GetAllMovie()
+        public IEnumerable<Genre> GetAllGenres()
         {
-            return _context.Movies.ToList();
+            return _context.Genres.ToList();
         }
 
-        public Movie GetMovieById(int id)
+        public Genre GetGenreById(int id)
         {
-            return _context.Movies.FirstOrDefault(m => m.Id == id);
+            return _context.Genres.FirstOrDefault(g => g.Id == id);
         }
 
-        public void CreateMovie(Movie movie)
+        public void CreateGenre(Genre genre)
         {
-            _context.Add(movie);
+            _context.Add(genre);
         }
 
-        public void UpdateMovie(Movie movie)
+        public void UpdateGenre(Genre genre)
         {
-            
+
         }
 
-        public void DeleteMovie(Movie movie)
+        public void DeleteGenre(Genre genre)
         {
-            _context.Remove(movie);
+            _context.Remove(genre);
         }
 
         public bool SaveChanges()

@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BlazorPracticeServer.Components.MovieComp
+@using BlazorPracticeServer.Services
 @* Search Bar *@
 <div style="margin-top: 5%">
     <EditForm Model="_movies">
@@ -21,9 +22,16 @@
 <MoviesList Movies="_movies">
 </MoviesList>
 
+<MoviesList Movies="_moviesTest">
+</MoviesList>
+
 
 @code{
     [Inject] public IRepository Repository { get; set; }
+    [Inject] public IMovieService MovieService { get; set; }
+
+
+    private List<Movie> _moviesTest;
     private List<Movie> _movies;
     private string SearchTitle { get; set; } = "";
 
@@ -31,5 +39,6 @@
     protected async override Task OnInitializedAsync()
     {
         _movies = Repository.Movies;
+        _moviesTest = (await MovieService.RetrieveAllMovieAsync()).ToList();
     }
 }

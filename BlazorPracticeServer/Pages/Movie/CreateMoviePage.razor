@@ -1,6 +1,11 @@
 ﻿@page "/movie/create"
 @inject NavigationManager NavigationManager
-@inject IRepository Repository  
+@inject IRepository Repository
+@inject IMovieService MovieService   
+@using BlazorPracticeServer.Components.MovieComp
+@using BlazorPracticeServer.Services
+
+
 
 <MovieForm Movie="Movie" OnValidSubmit="@(()=>CreateMovie(Movie))"/>
 
@@ -12,6 +17,7 @@
     private void CreateMovie(Movie movie)
     {
         // saving movie..
+        MovieService.RegisterMovieAsync(movie);
         Repository.Movies.Add(movie);
         NavigationManager.NavigateTo("/");
     }

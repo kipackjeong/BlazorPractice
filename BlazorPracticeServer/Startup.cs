@@ -14,7 +14,7 @@ using RESTFulSense.Clients;
 namespace BlazorPracticeServer
 {
     public class Startup
-    {
+    { 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,8 +35,6 @@ namespace BlazorPracticeServer
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IApiBroker, ApiBroker>();
 
-            services.AddHttpClient<IApiBroker, ApiBroker>(client =>
-                client.BaseAddress = new Uri("https://localhost:44322/"));
             services.AddHttpClient<IRESTFulApiFactoryClient, RESTFulApiFactoryClient>(client =>
             {
                 LocalConfigurations localConfigurations = Configuration.Get<LocalConfigurations>();

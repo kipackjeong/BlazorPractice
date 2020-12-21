@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorPracticeServer.Brokers.Api
+namespace BlazorPracticeServer.Services
 {
-    public partial interface IApiBroker
+    public interface IGenreService
     {
+
     }
 }
