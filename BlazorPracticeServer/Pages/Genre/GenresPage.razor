@@ -10,7 +10,11 @@
     <ul class="homes-list">
         @for (var i = 0; i < Genres.Count; i++)
         {
-            <li class="genre-@(i%8)">@Genres[i].Name</li>
+            <li class="genre-@(i % 8)">
+                <a href="genre/edit/@Genres[i].Id">
+                    @Genres[i].Name
+                </a>
+            </li>
         }
     </ul>
 </div>

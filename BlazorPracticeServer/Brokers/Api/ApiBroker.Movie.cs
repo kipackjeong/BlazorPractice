@@ -10,7 +10,7 @@ namespace BlazorPracticeServer.Brokers.Api
 
         public async ValueTask<IEnumerable<Movie>> GetAllMovieAsync()
         {
-            return await GetAsync<Movie>(_movieUrl);
+            return await GetAllAsync<Movie>(_movieUrl);
         }
 
         public async ValueTask<Movie> PostMovieAsync(Movie movie)
@@ -19,6 +19,6 @@ namespace BlazorPracticeServer.Brokers.Api
         }
 
 
-        //TODO 3: Implement Put and Delete in Movie ApiBroker
+        //TODO Movie API Broker Implement Put Patch Delete
     }
 }

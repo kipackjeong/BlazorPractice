@@ -9,6 +9,7 @@ namespace BlazorPracticeServer.Services
     public interface IGenreService
     {
         ValueTask<IEnumerable<Genre>> RetrieveAllGenreAsync();
-        ValueTask<Genre> RegisterGenreAsync(Genre movie);
+        ValueTask<Genre> RetrieveGenreByIdAsync(int id);
+        ValueTask <Genre> RegisterGenreAsync(Genre movie);
     }
 }

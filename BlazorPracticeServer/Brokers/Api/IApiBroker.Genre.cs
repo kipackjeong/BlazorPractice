@@ -9,6 +9,7 @@ namespace BlazorPracticeServer.Brokers.Api
     public partial interface IApiBroker
     {
         ValueTask<IEnumerable<Genre>> GetAllGenresAsync();
+        ValueTask<Genre> GetGenreById(int id);
         ValueTask<Genre> PostGenreAsync(Genre movie);
     }
 }

@@ -14,8 +14,11 @@ namespace BlazorPracticeServer.Brokers.Api
 
         public ApiBroker(IRESTFulApiFactoryClient apiClient) => _apiClient = apiClient;
 
-        private async ValueTask<IEnumerable<T>> GetAsync<T>(string relativeUrl) =>
+        private async ValueTask<IEnumerable<T>> GetAllAsync<T>(string relativeUrl) =>
             await this._apiClient.GetContentAsync<IEnumerable<T>>(relativeUrl);
+
+        private async ValueTask<T> GetAsync<T>(string relativeUrl) =>
+            await this._apiClient.GetContentAsync<T>(relativeUrl);
 
         private async ValueTask<T> PostAsync<T>(string relativeUrl, T content) =>
             await this._apiClient.PostContentAsync<T>(relativeUrl, content);

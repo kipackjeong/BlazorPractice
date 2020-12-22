@@ -6,24 +6,32 @@
 @if (Genre != null)
 {
     <h3f>@Test</h3f>
-    <GenreForm Genre="Genre" OnValidSubmit="Edit">
-    </GenreForm>
+    @if (Genre == null)
+    {
+        <text> loading... </text>
+    }
+    else
+    {
+        <GenreForm Genre="Genre" OnValidSubmit="Edit">
+        </GenreForm>
+    }
 }
 
 
 @code {
 
     [Parameter]
-    public int GenreId { get; set; } = 1;
+    public int GenreId { get; set; }
     [Inject]
     public IGenreService GenreService { get; set; }
-    public Genre Genre { get; set; } = new Genre();
+    public Genre Genre { get; set; }
 
     public string Test { get; set; } = string.Empty;
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        Genre = new Genre() {Id = GenreId, Name = "Comedy"};
+        Genre = await GenreService.RetrieveGenreByIdAsync(GenreId);
+
     }
 
     private void Edit()
