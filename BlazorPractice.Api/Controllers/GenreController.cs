@@ -27,25 +27,26 @@ namespace BlazorPractice.Api.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Genre>> GetAllMovies()
+        public ActionResult<IEnumerable<ReadGenreDto>> GetAllGenres()
         {
             var genres = _repo.GetAllGenres();
-            return Ok(_mapper.Map<IEnumerable<Genre>>(genres));
+            return Ok(_mapper.Map<IEnumerable<ReadGenreDto>>(genres));
         }
 
-        [HttpGet("{id}", Name = "GetMovieById")]
-        public ActionResult<Genre> GetMovieById(int id)
+        [HttpGet("{id}", Name = "GetGenreById")]
+        public ActionResult<Genre> GetGenreById(int id)
         {
             Genre genre = _repo.GetGenreById(id);
-            if (genre != null)
+            ReadGenreDto readGenre = _mapper.Map<ReadGenreDto>(genre);
+            if (readGenre != null)
             {
-                return Ok(genre);
+                return Ok(readGenre);
             }
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult PostGenre(Genre createGenreDto)
+        public ActionResult PostGenre(CreateGenreDto createGenreDto)
         {
             Genre genre = _mapper.Map<Genre>(createGenreDto);
             _repo.CreateGenre(genre);
@@ -53,7 +54,7 @@ namespace BlazorPractice.Api.Controllers
 
             ReadGenreDto readGenreDto = _mapper.Map<ReadGenreDto>(genre);
 
-            return CreatedAtRoute(nameof(GetMovieById), new { id = genre.Id },readGenreDto);
+            return CreatedAtRoute(nameof(GetGenreById), new { id = genre.Id },readGenreDto);
         }
 
         [HttpPut("{id}")]

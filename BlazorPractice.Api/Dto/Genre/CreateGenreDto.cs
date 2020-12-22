@@ -11,6 +11,5 @@ namespace BlazorPractice.Api.Dto.Genre
     {
         [Required(ErrorMessage = "This field is required")]
         public string Name { get; set; }
-        public ICollection<MovieGenre> MovieGenres { get; set; }
     }
 }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorPracticeServer.Entity;
 
 namespace BlazorPracticeServer.Services
 {
     public interface IGenreService
     {
-
+        ValueTask<IEnumerable<Genre>> RetrieveAllGenreAsync();
+        ValueTask<Genre> RegisterGenreAsync(Genre movie);
     }
 }

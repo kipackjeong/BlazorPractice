@@ -1,12 +1,28 @@
 ﻿@page "/genre"
+@using BlazorPracticeServer.Services
 
 <h3>GenresPage</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="genre/create">New genre</a>
 </div>
+<div class="list-group">
+    <ul class="homes-list">
+        @for (var i = 0; i < Genres.Count; i++)
+        {
+            <li class="genre-@(i%8)">@Genres[i].Name</li>
+        }
+    </ul>
+</div>
 
 @code {
-    public List<Genre> Genre { get; set; }
-    
+    [Inject]
+    public IGenreService GenreService { get; set; }
+
+    public List<Genre> Genres { get; set; } = new List<Genre>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
+    }
 }

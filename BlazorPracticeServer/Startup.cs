@@ -32,7 +32,8 @@ namespace BlazorPracticeServer
 
             services.AddSingleton<IRepository, MockRepository>();
 
-            services.AddScoped<IMovieService, MovieService>();
+            AddServices(services);
+
             services.AddScoped<IApiBroker, ApiBroker>();
 
             services.AddHttpClient<IRESTFulApiFactoryClient, RESTFulApiFactoryClient>(client =>
@@ -41,6 +42,12 @@ namespace BlazorPracticeServer
                 string apiUrl = localConfigurations.ApiConfigurations.Url;
                 client.BaseAddress = new Uri(apiUrl);
             });
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IGenreService, GenreService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

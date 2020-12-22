@@ -18,9 +18,9 @@ namespace BlazorPracticeServer.Services
             this.apiBroker = apiBroker;
         }
 
-        public async ValueTask<IEnumerable<Genre>> RetrieveAllMovieAsync() =>
+        public async ValueTask<IEnumerable<Genre>> RetrieveAllGenreAsync() =>
             await apiBroker.GetAllGenresAsync();
-        public async ValueTask<Genre> RegisterMovieAsync(Genre movie) =>
+        public async ValueTask<Genre> RegisterGenreAsync(Genre movie) =>
             await this.apiBroker.PostGenreAsync(movie);
     }
 }
