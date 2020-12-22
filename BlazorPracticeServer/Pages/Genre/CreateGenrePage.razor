@@ -1,13 +1,18 @@
 ﻿@page "/genre/create"
 @using BlazorPracticeServer.Components.GenreComp
-
+@using BlazorPracticeServer.Services
+@inject NavigationManager NavigationManager 
 <GenreForm Genre="genre" OnValidSubmit="Create">
 </GenreForm>
 
 
 @code {
+    [Inject]
+    public IGenreService GenreService { get; set; }
     private Genre genre = new Genre();
-    private void Create()
+    private async Task Create()
     {
+        await GenreService.RegisterGenreAsync(genre);
+        NavigationManager.NavigateTo("/genre");
     }
 }

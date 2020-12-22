@@ -1,6 +1,6 @@
 ﻿@typeparam T
 
-<CustomTypeahead SearchMethod="@(searchText => SearchMethod(searchText))"
+<CustomTypeahead SearchMethod="@((string searchText) => SearchMethod(searchText))"
                  ValueChanged="@((T item) => SelectedElement(item))">
     <ResultTemplate>
         @MyResultTemplate(context)
@@ -8,6 +8,7 @@
 </CustomTypeahead>
 
 <ul class="list-group">
+    <h3> @SelectedElements.Count</h3>
     @foreach (var item in SelectedElements)
     {
         <li draggable="true"
@@ -27,7 +28,7 @@
 @code {
 
     [Parameter]
-    public List<T> SelectedElements { get; set; } = new List<T>();
+    public List<T> SelectedElements { get; set; }
 
     [Parameter]
     public Func<string, Task<IEnumerable<T>>> SearchMethod { get; set; }

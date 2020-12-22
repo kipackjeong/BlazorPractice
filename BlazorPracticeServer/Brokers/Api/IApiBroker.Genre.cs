@@ -11,5 +11,7 @@ namespace BlazorPracticeServer.Brokers.Api
         ValueTask<IEnumerable<Genre>> GetAllGenresAsync();
         ValueTask<Genre> GetGenreById(int id);
         ValueTask<Genre> PostGenreAsync(Genre movie);
+        ValueTask<Genre> PutGenreAsync(Genre movie, int id);
+        ValueTask<Genre> DeleteGenreAsync(int id);
     }
 }

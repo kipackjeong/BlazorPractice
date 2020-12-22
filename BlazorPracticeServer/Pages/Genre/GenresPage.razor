@@ -1,31 +1,34 @@
 ﻿@page "/genre"
 @using BlazorPracticeServer.Services
-
-<h3>GenresPage</h3>
+@using BlazorPracticeServer.Components.GenreComp
+<h3>Genres</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="genre/create">New genre</a>
 </div>
-<div class="list-group">
-    <ul class="homes-list">
-        @for (var i = 0; i < Genres.Count; i++)
-        {
-            <li class="genre-@(i % 8)">
-                <a href="genre/edit/@Genres[i].Id">
-                    @Genres[i].Name
-                </a>
-            </li>
-        }
-    </ul>
-</div>
+
+<GenreList Genres="Genres" OnDeleteClicked="DeleteGenreAsync"> 
+
+</GenreList>
 
 @code {
-    [Inject]
-    public IGenreService GenreService { get; set; }
+    [Inject] public IGenreService GenreService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
 
     public List<Genre> Genres { get; set; } = new List<Genre>();
 
     protected async override Task OnInitializedAsync()
+    {
+        Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
+    }
+
+    private async Task DeleteGenreAsync(int genreId)
+    {
+        await GenreService.DeleteGenreAsync(genreId);
+        await UpdateGenre();
+        await InvokeAsync(StateHasChanged);
+    }
+    private async Task UpdateGenre()
     {
         Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
     }

@@ -10,6 +10,8 @@ namespace BlazorPracticeServer.Services
     {
         ValueTask<IEnumerable<Genre>> RetrieveAllGenreAsync();
         ValueTask<Genre> RetrieveGenreByIdAsync(int id);
-        ValueTask <Genre> RegisterGenreAsync(Genre movie);
+        ValueTask<Genre> RegisterGenreAsync(Genre movie);
+        ValueTask<Genre> UpdateGenreAsync(Genre movie, int id);
+        ValueTask<Genre> DeleteGenreAsync(int id);
     }
 }

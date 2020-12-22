@@ -1,0 +1,22 @@
+﻿
+<div class="list-group">
+    <ul class="genres-list">
+        @for (var i = 0; i < Genres.Count; i++)
+        {
+            var genre = Genres[i];
+            <li class="genre-@(i % 8)">
+                <a href="genre/edit/@genre.Id">
+                    @genre.Name
+                </a>
+                <button class="oi oi-delete" @onclick="@(()=>OnDeleteClicked.InvokeAsync(genre.Id))"></button>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public List<Genre> Genres { get; set; }
+
+    [Parameter] public EventCallback<int> OnDeleteClicked { get; set; }
+}

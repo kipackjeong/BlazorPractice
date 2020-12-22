@@ -3,8 +3,6 @@
 @* Modification from chris Sainty's typeahead component *@
 
 
-<h3>CustomTypeahead</h3>
-
 <div class="blazored-typeahead">
     <div class="blazored-typeahead__controls">
         <input type="text"
@@ -29,7 +27,10 @@
         <div class="blazored-typeahead__results">
             @foreach (var item in Suggestions)
             {
-                <div @key="item" class="blaozred-typeahead__result" tabindex="0" @onclick="@(() => SelectSuggestion(item))">
+                <div @key="item" class="blazored-typeahead__result" tabindex="0" 
+                      @onclick="@(() => SelectSuggestion(item))"
+                      @onmouseover="OnmouseoverSuggestion" 
+                      @onmouseout="OnmouseoutSuggestion">
                     @ResultTemplate(item)
                 </div>
             }
@@ -56,31 +57,17 @@
 
 @code {
 
-    [Parameter]
-    public string Placeholder { get; set; }
-
-    [Parameter]
-    public int Debounce { get; set; } = 300;
-
-    [Parameter]
-    public int MinimumLength { get; set; } = 3;
-
-    [Parameter]
-    public Func<string, Task<IEnumerable<TItem>>> SearchMethod { get; set; }
-
-    [Parameter]
-    public EventCallback<TItem> ValueChanged { get; set; }
-
-    [Parameter]
-    public RenderFragment NotFoundTemplate { get; set; }
-
-    [Parameter]
-    public RenderFragment<TItem> ResultTemplate { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+    [Parameter] public int Debounce { get; set; } = 300;
+    [Parameter] public int MinimumLength { get; set; } = 3;
+    [Parameter] public Func<string, Task<IEnumerable<TItem>>> SearchMethod { get; set; }
+    [Parameter] public EventCallback<TItem> ValueChanged { get; set; }
+    [Parameter] public RenderFragment NotFoundTemplate { get; set; }
+    [Parameter] public RenderFragment<TItem> ResultTemplate { get; set; }
 
     private bool _isSearching = false;
     private bool _isShowingSuggestions = false;
     private string _searchText = string.Empty;
-
     private string SearchText
     {
         get => _searchText;
@@ -100,12 +87,12 @@
             }
         }
     }
-
     private Timer _debounceTimer;
     protected TItem[] Suggestions { get; set; } = new TItem[0];
+    bool _isMouseInSuggestion = false;
 
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
         _debounceTimer = new Timer();
         _debounceTimer.Interval = Debounce;
@@ -113,7 +100,7 @@
         _debounceTimer.Elapsed += Search;
     }
 
-    protected async void Search(object source, ElapsedEventArgs e)
+    protected async void Search(Object source, ElapsedEventArgs e)
     {
         _isSearching = true;
         _isShowingSuggestions = false;
@@ -147,11 +134,26 @@
     {
         SearchText = "";
         await ValueChanged.InvokeAsync(item);
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnFocusOut()
     {
-        _isShowingSuggestions = false;
+        if (!_isMouseInSuggestion)
+        {
+            _isShowingSuggestions = false;
+        }
+    }
+
+    private void OnmouseoverSuggestion()
+    {
+        _isMouseInSuggestion = true;
+    }
+
+    private void OnmouseoutSuggestion()
+    {
+
+        _isMouseInSuggestion = false;
     }
 
 }
