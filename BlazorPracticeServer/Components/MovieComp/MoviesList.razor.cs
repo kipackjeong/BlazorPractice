@@ -1,10 +1,10 @@
 ﻿using BlazorPracticeServer.Components.Enums;
+using BlazorPracticeServer.Entity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity;
 
 namespace BlazorPracticeServer.Components.MovieComp
 {

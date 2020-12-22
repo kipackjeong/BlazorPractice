@@ -1,10 +1,6 @@
-﻿using System;
+﻿using RESTFulSense.Clients;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity;
-using RESTFulSense.Clients;
 
 namespace BlazorPracticeServer.Brokers.Api
 {

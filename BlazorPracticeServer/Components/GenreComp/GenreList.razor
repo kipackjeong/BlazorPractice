@@ -1,22 +1,16 @@
-﻿
-<div class="list-group">
-    <ul class="genres-list">
+﻿<div class="list-group">
+    <div class="genres-list" style="width: 40rem">
         @for (var i = 0; i < Genres.Count; i++)
         {
             var genre = Genres[i];
-            <li class="genre-@(i % 8)">
-                <a href="genre/edit/@genre.Id">
-                    @genre.Name
-                </a>
-                <button class="oi oi-delete" @onclick="@(()=>OnDeleteClicked.InvokeAsync(genre.Id))"></button>
-            </li>
+            <GenreIndividual Genre="genre" nthGenre="i" OnDeleteClicked ="OnDeleteClicked">
+            </GenreIndividual>
         }
-    </ul>
+    </div>
 </div>
 
 @code {
     [Parameter]
     public List<Genre> Genres { get; set; }
-
     [Parameter] public EventCallback<int> OnDeleteClicked { get; set; }
 }

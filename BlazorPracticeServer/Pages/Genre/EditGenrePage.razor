@@ -31,7 +31,6 @@
     protected async override Task OnInitializedAsync()
     {
         Genre = await GenreService.RetrieveGenreByIdAsync(GenreId);
-
     }
 
     private void Edit()

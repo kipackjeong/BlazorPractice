@@ -7,9 +7,9 @@
     <a class="btn btn-info" href="genre/create">New genre</a>
 </div>
 
-<GenreList Genres="Genres" OnDeleteClicked="DeleteGenreAsync"> 
+<GenreList Genres="Genres" OnDeleteClicked= "@DeleteGenreAsync"/> 
 
-</GenreList>
+
 
 @code {
     [Inject] public IGenreService GenreService { get; set; }
@@ -22,7 +22,7 @@
         Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
     }
 
-    private async Task DeleteGenreAsync(int genreId)
+    private async void DeleteGenreAsync(int genreId)
     {
         await GenreService.DeleteGenreAsync(genreId);
         await UpdateGenre();

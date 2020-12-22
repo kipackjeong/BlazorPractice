@@ -1,4 +1,3 @@
-using System;
 using BlazorPracticeServer.Brokers.Api;
 using BlazorPracticeServer.Data;
 using BlazorPracticeServer.Models.Configuration;
@@ -10,11 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RESTFulSense.Clients;
+using System;
 
 namespace BlazorPracticeServer
 {
     public class Startup
-    { 
+    {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

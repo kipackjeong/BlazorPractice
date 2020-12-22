@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BlazorPracticeServer.Entity;
+﻿using BlazorPracticeServer.Entity;
+using System.Collections.Generic;
 
 namespace BlazorPracticeServer.Data
 {

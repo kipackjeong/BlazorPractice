@@ -8,13 +8,13 @@ namespace BlazorPracticeServer.Brokers.Api
     {
         private const string _movieUrl = "/api/movie";
 
-        public async ValueTask<IEnumerable<Movie>> GetAllMovieAsync()=>
+        public async ValueTask<IEnumerable<Movie>> GetAllMovieAsync() =>
             await GetAllAsync<Movie>(_movieUrl);
 
         public async ValueTask<Movie> GetMovieByIdAsync(int id) =>
             await GetAsync<Movie>(_movieUrl);
 
-        public async ValueTask<Movie> PostMovieAsync(Movie movie)=>
+        public async ValueTask<Movie> PostMovieAsync(Movie movie) =>
             await PostAsync(_movieUrl, movie);
 
         public async ValueTask<Movie> PutMovieAsync(Movie movie, int id) =>

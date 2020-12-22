@@ -1,8 +1,6 @@
-﻿using System;
+﻿using BlazorPracticeServer.Entity;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity;
 
 namespace BlazorPracticeServer.Brokers.Api
 {
@@ -10,7 +8,7 @@ namespace BlazorPracticeServer.Brokers.Api
     {
         private const string _genreUrl = "/api/genre";
 
-        public async ValueTask<IEnumerable<Genre>> GetAllGenresAsync()=>
+        public async ValueTask<IEnumerable<Genre>> GetAllGenresAsync() =>
             await GetAllAsync<Genre>(_genreUrl);
 
         public async ValueTask<Genre> GetGenreById(int id) =>
