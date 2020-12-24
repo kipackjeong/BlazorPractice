@@ -1,15 +1,15 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 
 namespace BlazorPractice.Api.Data.Contract
 {
     public interface IMovieRepository
     {
-        IEnumerable<Movie> GetAllMovie();
+        AllMoviesDto GetAllMovie();
         Movie GetMovieById(int id);
+        IEnumerable<Movie> GetAllMovieByName(string movieName);
         void CreateMovie(Movie movie);
         void UpdateMovie(Movie movie);
         void DeleteMovie(Movie movie);

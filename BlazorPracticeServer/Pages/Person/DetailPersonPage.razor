@@ -1,0 +1,36 @@
+﻿@page "/person/detail/{PersonId:int}" 
+@using BlazorPracticeServer.Services
+@using BlazorPracticeServer.Components.PersonComp
+
+@if (Person != null)
+{
+    <PersonIndividual Person="Person" OnDeleteClicked="DeletePerson" OnEditClicked ="GoToEditPersonPage"></PersonIndividual>
+}
+
+
+@code {
+
+
+    //TODO 1: DetailPersonPage
+    [Inject] public IPersonService PersonService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Parameter] public int PersonId { get; set; }
+
+    private Person Person;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Person = await PersonService.RetrievePersonByIdAsync(PersonId);
+    }
+
+    private async Task DeletePerson(int id)
+    {
+        await PersonService.DeletePersonAsync(id);
+        NavigationManager.NavigateTo("/people");
+    }
+
+    private async Task GoToEditPersonPage(int id)
+    {
+        NavigationManager.NavigateTo($"/person/edit/{id}");
+    }
+}

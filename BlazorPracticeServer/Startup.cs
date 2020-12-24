@@ -1,5 +1,4 @@
 using BlazorPracticeServer.Brokers.Api;
-using BlazorPracticeServer.Data;
 using BlazorPracticeServer.Models.Configuration;
 using BlazorPracticeServer.Services;
 using BlazorStrap;
@@ -30,7 +29,6 @@ namespace BlazorPracticeServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddSingleton<IRepository, MockRepository>();
 
             AddServices(services);
 
@@ -48,6 +46,7 @@ namespace BlazorPracticeServer
         {
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IPersonService, PersonService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

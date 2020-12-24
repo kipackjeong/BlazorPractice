@@ -27,7 +27,7 @@ namespace BlazorPractice.Api.Data.Concrete
 
         public void CreateGenre(Genre genre)
         {
-            _context.Add(genre);
+            _context.Genres.Add(genre);
         }
 
         public void UpdateGenre(Genre genre)
@@ -37,7 +37,7 @@ namespace BlazorPractice.Api.Data.Concrete
 
         public void DeleteGenre(Genre genre)
         {
-            _context.Remove(genre);
+            _context.Genres.Remove(genre);
         }
 
         public bool SaveChanges()

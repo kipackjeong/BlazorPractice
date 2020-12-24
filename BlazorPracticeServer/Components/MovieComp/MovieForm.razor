@@ -1,8 +1,9 @@
 ﻿@using BlazorPracticeServer.Models
+@using BlazorPracticeServer.Models.Arguments
+@using BlazorPracticeServer.Services
 @inject NavigationManager NavigationManager
-@inject IRepository Repository
 
-<EditForm Model="Movie" OnValidSubmit="OnValidSubmit">
+<EditForm Model="Movie" OnValidSubmit="ValidSubmit">
     <DataAnnotationsValidator />
 
     <div class="form-group">
@@ -51,10 +52,9 @@
     </div>
     <!-- #endregion -->
     <!-- #region Genre MultiSelector -->
-    <MultipleSelector NotSelected="NotSelectedGenres" Selected="SelectedGenres">
+    <MultipleSelector NotSelected="NotSelectedModel" Selected="SelectedModels">
     </MultipleSelector>
     <!-- #endregion -->
-
     <!-- #region Actor -->
     <div class="form-group">
         <label>Actors:</label>
@@ -66,7 +66,7 @@
                     @person.Name
                 </MyResultTemplate>
                 <MyListTemplate>
-                    @person.Name
+                    @person.Name / <input type="text" placeholder="Character" @bind="person.Character" />
                 </MyListTemplate>
             </MultipleSelectorTypeahead>
         </div>
@@ -77,26 +77,31 @@
     <button class="btn btn-success" type="submit"> Save Changes </button>
 </EditForm>
 @code {
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public IGenreService GenreService { get; set; }
+    [Inject] public IPersonService PersonService { get; set; }
+
 
     [Parameter] public Movie Movie { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback<Movie> OnValidSubmit { get; set; }
     [Parameter] public List<Person> SelectedActors { get; set; } = new List<Person>();
-    private List<MultipleSelectorModel> SelectedGenres { get; set; } = new List<MultipleSelectorModel>();
-    private List<MultipleSelectorModel> NotSelectedGenres { get; set; } = new List<MultipleSelectorModel>();
 
-    public List<Genre> Genres { get; set; } = new List<Genre>();
+    private List<MultipleSelectorModel> SelectedModels { get; set; } = new List<MultipleSelectorModel>();
+    private List<MultipleSelectorModel> NotSelectedModel { get; set; } = new List<MultipleSelectorModel>();
+
+
+    //public List<Genre> Genres { get; set; } = new List<Genre>();
+
     private string _selectedGenre = string.Empty;
     private string _imageUrl { get; set; }
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(Movie.Poster))
-            _imageUrl = Movie.Poster;
 
-        #region Movie Genre Selected/NotSelected
+    #region Movie Genre list -> MultipleSelctor Model list
         if (Movie.MovieGenres != null)
         {   // in edit page
-            SelectedGenres =
+            SelectedModels =
                 Movie.MovieGenres
                     .Select(x => new MultipleSelectorModel(x.GenreId.ToString(), x.Genre.Name))
                     .ToList();
@@ -106,19 +111,22 @@
                     .Select(x => x.Genre)
                     .ToList();
 
-            NotSelectedGenres =
-                Repository.Genres
+            NotSelectedModel =
+                (await GenreService.RetrieveAllGenreAsync()).ToList()
                     .Where(g => !selectedGenres.Contains(g))
                     .Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name))
                     .ToList();
         }
         else
         {   // in create page
-            NotSelectedGenres =
-                Repository.Genres
+            NotSelectedModel =
+                (await GenreService.RetrieveAllGenreAsync()).ToList()
                     .Select(g => new MultipleSelectorModel(g.Id.ToString(), g.Name))
                     .ToList();
         }
+
+        if (!string.IsNullOrEmpty(Movie.Poster))
+            _imageUrl = Movie.Poster;
         #endregion
     }
 
@@ -130,9 +138,29 @@
 
     private async Task<IEnumerable<Person>> SearchMethod(string searchText)
     {
-        return new List<Person>() {
-            new Person() { Id= 1, Name = "Tom Holland", Picture = "https://m.media-amazon.com/images/M/MV5BNTAzMzA3NjQwOF5BMl5BanBnXkFtZTgwMDUzODQ5MTI@._V1_UY317_CR23,0,214,317_AL_.jpg" },
-            new Person() {Id = 2, Name = "Tom Hanks", Picture = "https://m.media-amazon.com/images/M/MV5BMTQ2MjMwNDA3Nl5BMl5BanBnXkFtZTcwMTA2NDY3NQ@@._V1_UY317_CR2,0,214,317_AL_.jpg" }
-        };
+        return await PersonService.RetrievePeopleByName(searchText);
+    }
+
+    private async Task ValidSubmit()
+    {
+        // multipleselectormodel list -> genre list
+
+        var selectedGenres = SelectedModels.Select(g => new Genre() { Id = int.Parse(g.Key) }).ToList();
+
+        Movie.MovieGenres = SelectedModels
+            .Select(e => new MovieGenre() {  GenreId = int.Parse(e.Key) })
+            .ToList();
+
+        Movie.MoviePeople = SelectedActors
+            .Select(e => new MoviePerson() { PersonId = e.Id , Character = e.Character ?? "n/a" });
+
+        if (!string.IsNullOrWhiteSpace(Movie.Poster))
+            _imageUrl = null;
+
+        await OnValidSubmit.InvokeAsync();
+
+        await InvokeAsync(StateHasChanged);
+
+        NavigationManager.NavigateTo("/");
     }
 }

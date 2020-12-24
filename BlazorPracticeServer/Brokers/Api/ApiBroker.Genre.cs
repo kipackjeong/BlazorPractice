@@ -23,7 +23,5 @@ namespace BlazorPracticeServer.Brokers.Api
         public async ValueTask<Genre> DeleteGenreAsync(int id) =>
             await DeleteAsync<Genre>(_genreUrl + $"/{id}");
 
-        //TODO Genre Broker : Implement Put, Patch, and Delete
-
     }
 }

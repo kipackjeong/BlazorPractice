@@ -1,22 +1,22 @@
 ﻿@page "/movie/search"
 @using BlazorPracticeServer.Components.MovieComp
 @using System.ComponentModel
-@inject IRepository Repository
+@using BlazorPracticeServer.Services
 
 <div class="form-inline">
     <div class="form-group mb-2">
         <label for="title" class="sr-only"> Title</label>
         <input type="text" class="form-control" id="title" placeholder="Movie Title"
-               @bind-value="@title" @bind-value:event="oninput"
+               @bind-value="@_searchTitle" @bind-value:event="oninput"
                @onkeypress="@TitleKeyPress" />
     </div>
 
     <div class="form-group mx-sm-3 mb-2">
-        <select class="form-control" @bind="selectedGenre">
+        <select class="form-control" @bind="_selectedGenre">
             <option value="0">
                 --Select a Genre
             </option>
-            @foreach (var genre in _genres)
+            @foreach (var genre in Genres)
             {
                 <option value="@genre.Id">@genre.Name</option>
             }
@@ -24,13 +24,13 @@
     </div>
 
     <div class="form-group mx-sm-3 mb-2">
-        <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="upcomingReleases" />
+        <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="_upcomingReleaseStatus" />
         <label class="form-check-label" for="upcomingReleases">
             Upcoming Releases
         </label>
     </div>
     <div class="form-group mx-sm-3 mb-2">
-        <input type="checkbox" class="form-check-input" id="inTheaters" @bind="inTheaters" />
+        <input type="checkbox" class="form-check-input" id="inTheaters" @bind="_inTheaterStatus" />
         <label class="form-check-label" for="inTheaters">
             Upcoming Releases
         </label>
@@ -38,9 +38,11 @@
 </div>
 <BSButton Color="@Color.Light" @onclick="@SearchForMovies">Filter</BSButton>
 <BSButton Color="@Color.Light" @onclick="@Clear">Clear</BSButton>
-@if (title.Length == 0)
+
+
+@if (_searchTitle == string.Empty)
 {
-    <MoviesList Movies="AllMovies"></MoviesList>
+    <MoviesList Movies="SearchedMovies"></MoviesList>
 }
 @if (SearchedMovies == null)
 {
@@ -53,55 +55,50 @@ else
 
 
 @code {
-    string title = "";
-    string selectedGenre = "0";
-    bool upcomingReleases = false;
-    bool inTheaters = false;
-    public MoviesList movieList;
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public IGenreService GenreService { get; set; }
+
+
+    private string _searchTitle = "";
+    private string _selectedGenre = "0";
+    private bool _upcomingReleaseStatus = false;
+    private bool _inTheaterStatus = false;
+
     private Genre _genre = new Genre();
-    private List<Movie> AllMovies { get; set; } = new List<Movie>();
+
     private List<Movie> SearchedMovies { get; set; } = new List<Movie>();
-    private List<Genre> _genres { get; set; } = new List<Genre>();
+    private List<Genre> Genres { get; set; } = new List<Genre>();
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        _genres = Repository.Genres;
-        AllMovies = Repository.Movies;
+        Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
     }
 
-    private void TitleKeyPress()
+    private async Task TitleKeyPress()
     {
-        SearchForMovies();
+        await SearchForMovies();
     }
 
-    private void SearchForMovies()
+    private async Task SearchForMovies()
     {
-        if (title == string.Empty)
+        if (_searchTitle.Length < 2)
         {
             return;
         }
-
-        if (selectedGenre == "0")
+        SearchedMovies = (await MovieService.RetrieveMovieByNameAsync(_searchTitle)).ToList();
+        await InvokeAsync(StateHasChanged);
+        if (_selectedGenre != "0")
         {
-            SearchedMovies = AllMovies.FindAll(m =>
-        m.Title.Length >= title.Length
-        && m.Title.ToLower().Substring(0, title.Length) == title.ToLower()
-    );
-        }
-        else
-        {
-            SearchedMovies = AllMovies.Where(m =>
-                m.Title.Length >= title.Length
-                && m.Title.Contains(title)
-            ).ToList();
+            int selectedGenreInt = int.Parse(_selectedGenre);
+            //TODO : Filter movie by Genre
         }
     }
 
     private void Clear()
     {
-        title = string.Empty;
-        selectedGenre = string.Empty;
-        upcomingReleases = false;
-        inTheaters = false;
+        _searchTitle = string.Empty;
+        _selectedGenre = string.Empty;
+        _upcomingReleaseStatus = false;
+        _inTheaterStatus = false;
     }
 }

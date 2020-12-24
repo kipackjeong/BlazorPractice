@@ -15,7 +15,8 @@ namespace BlazorPracticeServer.Entity
         [Required] public bool InTheater { get; set; }
         [Required] public string Trailer { get; set; }
 
-        public ICollection<MovieGenre> MovieGenres { get; set; }
+        public IEnumerable<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
+        public IEnumerable<MoviePerson> MoviePeople { get; set; } = new List<MoviePerson>();
 
         [NotMapped] public Genre Genre { get; set; }
     }

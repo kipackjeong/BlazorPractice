@@ -5,9 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlazorPractice.Api.Data.Contract;
-using BlazorPractice.Api.Dto.Genre;
-using BlazorPractice.Api.Dto.Movie;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.GenreDto;
 using Microsoft.AspNetCore.JsonPatch;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

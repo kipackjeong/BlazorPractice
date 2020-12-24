@@ -37,14 +37,13 @@
 @code {
     [Parameter] public Person Person { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    string imageURL;
+    private string imageURL;
 
     protected async override Task OnInitializedAsync()
     {
         if (!string.IsNullOrEmpty(Person.Picture))
         {
             imageURL = Person.Picture;
-            Person.Picture = null;
         }
     }
 

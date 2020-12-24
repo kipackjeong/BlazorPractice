@@ -2,7 +2,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #181818;
+    background: #0A0404;
 }
 
 a {
@@ -28,7 +28,7 @@ h1, h2, h3 {
 }
 
 .page {
-    background: #181818;
+    background: #0A0404;
 }
 
 .content {
@@ -66,13 +66,76 @@ h1, h2, h3 {
         top: 0.5rem;
     }
 
+/*#region MovieList */
+
+#movies {
+    padding: 5rem 0;
+    background: rgba(0, 0, 0, 0.87);
+}
+
+    #movies h3 {
+        text-align: center;
+    }
+
+.movies-list {
+    padding: 3rem 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .movies-list .individual-movie-container {
+        background-color: transparent;
+    }
+
+    .movies-list .movie-poster {
+        width: 10rem;
+        height: 15rem;
+    }
+
+.movie-poster {
+    width: 100%;
+}
+
+.individual-movie-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0.5rem;
+    width: 25%;
+    height: 25rem;
+    background: rgba(0, 0, 0, 0.87);
+    ;
+}
+
+.movie-poster-cont {
+    width: 90%;
+    fill-opacity: 1;
+}
+
+
+
+.individual-movie-container p {
+    max-width: 225px;
+    height: 44px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.button-group {
+    width: 100%;
+    left: 0;
+}
+
+/*#endregion */
 /*#region Carousel */
 
 div#carousel {
-    perspective: 1200px;
+    margin: 10rem 0;
+    perspective: 3000px;
     font-size: 0;
-    margin-bottom: 3rem;
-    overflow: hidden;
+    transform: scaleY(1);
 }
 
 figure#spinner {
@@ -84,12 +147,16 @@ figure#spinner {
 }
 
     figure#spinner div {
-        width: 100%;
-        max-width: 425px;
+        width: 80%;
+        max-width: 18rem;
         position: absolute;
         left: 30%;
         transform-origin: 50% 50% -500px;
         outline: 1px solid transparent;
+    }
+
+    figure#spinner .individual-movie-container img {
+        height: 20rem;
     }
 
     figure#spinner .individual-movie-container:nth-child(1) {
@@ -144,10 +211,6 @@ div#carousel ~ span {
 
 /*#endregion */
 
-#movies-list {
-    display: flex;
-    flex-wrap: wrap;
-}
 
 
 /*#region Markdown */
@@ -404,5 +467,57 @@ div#carousel ~ span {
     animation: sk-scaleout 1.0s infinite ease-in-out;
 }
 
+
+/*#endregion */
+
+
+/*#region PersonIndividual */
+
+#person-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    m color: white;
+}
+
+    #person-detail div {
+        margin: auto;
+        padding-bottom: 2rem;
+    }
+
+.detailtop {
+}
+
+.detailtop-top {
+    width: 50%;
+}
+
+    .detailtop-top img {
+        width: 20rem;
+        margin: auto;
+        display: block;
+    }
+
+.detailtop-bot {
+    width: 80%;
+    text-align: center;
+}
+
+    .detailtop-bot div {
+    }
+
+.detailbot {
+    margin: auto;
+    display: block;
+}
+
+.detailbot-top {
+    width: 10rem;
+}
+
+.detailbot-bottom {
+    width: 8.5rem;
+}
 
 /*#endregion */

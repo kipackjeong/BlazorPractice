@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlazorPractice.Api.Data.Concrete;
 using BlazorPractice.Api.Data.Contract;
-using BlazorPractice.Api.Dto.Movie;
+using BlazorPractice.Api.Helper;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 
@@ -16,23 +18,27 @@ namespace BlazorPractice.Api.Controllers
     [ApiController]
     public class MovieController : Controller
     {
-        private IMovieRepository _repo;
-        private IMapper _mapper;
+        private readonly IMovieRepository _repo;
+        private readonly IMapper _mapper;
+        private readonly IFileStorageService _fileStorageService;
 
-        public MovieController(IMovieRepository repo, IMapper mapper)
+        public MovieController(IMovieRepository repo, IMapper mapper, IFileStorageService fileStorageService)
         {
             _repo = repo;
             _mapper = mapper;
+            _fileStorageService = fileStorageService;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Movie>> GetAllMovies()
+        public async ValueTask<ActionResult<AllMoviesDto>> GetAllMovies()
         {
-            var movies = _repo.GetAllMovie();
-            return Ok(_mapper.Map<IEnumerable<Movie>>(movies));
+
+            var allMovieDto = _repo.GetAllMovie();
+
+            return Ok(allMovieDto);
         }
 
         [HttpGet("{id}", Name = "GetMovieById")]
-        public ActionResult<Movie> GetMovieById(int id)
+        public async ValueTask<ActionResult<Movie>> GetMovieById(int id)
         {
             Movie movie = _repo.GetMovieById(id);
             if (movie != null)
@@ -42,9 +48,31 @@ namespace BlazorPractice.Api.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public ActionResult PostMovie(CreateMovieDto createMovieDto)
+        [HttpGet("search/{searchText}")]
+        public async ValueTask<ActionResult<IEnumerable<ReadMovieDto>>> GetAllMovieByName(string searchText)
         {
+            if (string.IsNullOrWhiteSpace(searchText))
+                return new List<ReadMovieDto>();
+
+            IEnumerable<Movie> filteredMovies = _repo.GetAllMovieByName(searchText);
+
+            if (filteredMovies == null || !filteredMovies.Any())
+                return new List<ReadMovieDto>();
+
+            IEnumerable<ReadMovieDto> filteredReadMovie = _mapper.Map<IEnumerable<ReadMovieDto>>(filteredMovies);
+
+            return Ok(filteredReadMovie);
+        }
+
+        [HttpPost]
+        public async ValueTask<ActionResult> PostMovie(CreateMovieDto createMovieDto)
+        {
+            if (!string.IsNullOrWhiteSpace(createMovieDto.Poster))
+            {
+                var moviePoster = Convert.FromBase64String(createMovieDto.Poster);
+                createMovieDto.Poster = await _fileStorageService.SaveFile(moviePoster, "jpg", "movies");
+            }
+
             Movie movie = _mapper.Map<Movie>(createMovieDto);
             _repo.CreateMovie(movie);
             _repo.SaveChanges();
@@ -55,8 +83,14 @@ namespace BlazorPractice.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult PutMovie(int id, UpdateMovieDto updateMovieDto)
+        public async ValueTask<ActionResult> PutMovie(int id, UpdateMovieDto updateMovieDto)
         {
+            if (_fileStorageService.IsBase64(updateMovieDto.Poster))
+            {
+                var personPicture = Convert.FromBase64String(updateMovieDto.Poster);
+                updateMovieDto.Poster = await _fileStorageService.SaveFile(personPicture, "jpg", "people");
+            }
+
             Movie movie = _repo.GetMovieById(id);
             if (movie == null)
             {
@@ -71,7 +105,7 @@ namespace BlazorPractice.Api.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PatchMovie(JsonPatchDocument<UpdateMovieDto> jsonDoc, int id)
+        public async ValueTask<ActionResult> PatchMovie(JsonPatchDocument<UpdateMovieDto> jsonDoc, int id)
         {
             Movie movie = _repo.GetMovieById(id);
             if (movie == null)
@@ -92,7 +126,7 @@ namespace BlazorPractice.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteMovie(int id)
+        public async ValueTask<ActionResult> DeleteMovie(int id)
         {
             Movie movie = _repo.GetMovieById(id);
             if (movie == null)

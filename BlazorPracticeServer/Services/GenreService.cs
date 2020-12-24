@@ -22,11 +22,11 @@ namespace BlazorPracticeServer.Services
         public async ValueTask<Genre> RetrieveGenreByIdAsync(int id) =>
             await _apiBroker.GetGenreById(id);
 
-        public async ValueTask<Genre> RegisterGenreAsync(Genre movie) =>
-            await _apiBroker.PostGenreAsync(movie);
+        public async ValueTask<Genre> RegisterGenreAsync(Genre genre) =>
+            await _apiBroker.PostGenreAsync(genre);
 
-        public async ValueTask<Genre> UpdateGenreAsync(Genre movie, int id) =>
-            await _apiBroker.PutGenreAsync(movie, id);
+        public async ValueTask<Genre> UpdateGenreAsync(Genre genre, int id) =>
+            await _apiBroker.PutGenreAsync(genre, id);
 
         public async ValueTask<Genre> DeleteGenreAsync(int id) =>
             await _apiBroker.DeleteGenreAsync(id);

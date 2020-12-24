@@ -1,0 +1,72 @@
+﻿@using BlazorPracticeServer.Services
+
+
+<div id="person-detail">
+    <div class="detailtop" style="color:white">
+        <div class="detailtop-top">
+            @* Picture *@
+            <img src="@Person.Picture" />
+        </div>
+        <div class="detailtop-bot">
+            @* Data *@
+            <div>
+                @* name *@
+                <h1> @Person.Name</h1>
+            </div>
+            <div>
+                @* DOB *@
+                <h4>
+                    Date of Birth : @Person.DateOfBirth?.ToString("MMMM, dd yyyy");
+   
+                </h4>
+            </div>
+            <div>
+                @* Biography *@
+                <p> @Person.Biography </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="detailbot">
+        <div class="detailbot-top">
+            @* movies *@
+            @if (Person.MoviePeople != null)
+            {
+                foreach (var movie in Person.MoviePeople)
+                {
+                    <span> @movie.Movie.Title </span>
+                }
+            }
+            else
+            {
+                <p> Movies not registered </p>
+            }
+        </div>
+        <div class="detailbot-bottom">
+            @* button *@
+            <BSButton Color="Color.Info" @onclick="@(()=> OnEditClicked.InvokeAsync(Person.Id))">
+                Edit
+            </BSButton>
+            <BSButton Color="Color.Danger" @onclick="@(()=>OnDeleteClicked.InvokeAsync(Person.Id))">
+                Delete
+            </BSButton>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Person Person { get; set; }
+    [Parameter]
+    public EventCallback<int> OnDeleteClicked { get; set; }
+    [Parameter]
+    public EventCallback<int> OnEditClicked { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    [Inject]
+    public IPersonService PersonService { get; set; }
+}

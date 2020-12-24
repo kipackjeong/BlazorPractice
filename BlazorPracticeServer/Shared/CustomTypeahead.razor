@@ -105,11 +105,13 @@
         _isSearching = true;
         _isShowingSuggestions = false;
         await InvokeAsync(StateHasChanged);
-
-        Suggestions = (await SearchMethod.Invoke(_searchText)).ToArray();
-        _isSearching = false;
-        _isShowingSuggestions = true;
-        await InvokeAsync(StateHasChanged);
+        if (_searchText.Length > 2)
+        {
+            Suggestions = (await SearchMethod.Invoke(_searchText)).ToArray();
+            _isSearching = false;
+            _isShowingSuggestions = true;
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private void ShowSuggestions()

@@ -13,6 +13,12 @@ namespace BlazorPracticeServer.Brokers.Api
         private async ValueTask<IEnumerable<T>> GetAllAsync<T>(string relativeUrl) =>
             await this._apiClient.GetContentAsync<IEnumerable<T>>(relativeUrl);
 
+        private async ValueTask<T> GetAllIndexAsync<T>(string relativeUrl) =>
+            await this._apiClient.GetContentAsync<T>(relativeUrl);
+
+        private async ValueTask<IEnumerable<T>> GetAllFilteredAsync<T>(string relativeUrl) =>
+            await this._apiClient.GetContentAsync<IEnumerable<T>>(relativeUrl);
+
         private async ValueTask<T> GetAsync<T>(string relativeUrl) =>
             await this._apiClient.GetContentAsync<T>(relativeUrl);
 

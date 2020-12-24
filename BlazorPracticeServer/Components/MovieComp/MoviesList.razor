@@ -1,25 +1,29 @@
 @using BlazorPracticeServer.Components.Generic
-<div id="movies-list">
-    <GenericList List="@Movies">
-        <ChildContent Context="movie">
-            <IndividualMovie Movie="movie" DisplayButtons="@_displayDeleteButton" DeleteMoviePrompt="DeleteMoviePrompt" EditMoviePrompt="EditMoviePrompt">
-            </IndividualMovie>
-        </ChildContent>
-    </GenericList>
+
+<div id="movies">
+    <h3>@Label</h3>
+    <div class="movies-list">
+        <GenericList List="@Movies">
+            <ChildContent Context="movie">
+                <IndividualMovie Movie="movie" DisplayButtons="@_displayDeleteButton" DeleteMoviePrompt="DeleteMoviePrompt" EditMoviePrompt="EditMoviePrompt">
+                </IndividualMovie>
+            </ChildContent>
+        </GenericList>
 
 
 
-    @* Confirmation Modal *@
-    <div>
-        <Confirmation @ref="@Confirmation" OnEditConfirm="@EditMovie" OnDeleteConfirm="@DeleteMovie" MovieToEdit="@MovieToChange">
-            @if (Confirmation.ConfirmType == Enums.ConfirmType.Delete)
-            {
-                <text> Are you sure you want to delete this movie? </text>
-            }
-            else
-            {
-                <text> Edit this movie </text>
-            }
-        </Confirmation>
+        @* Confirmation Modal *@
+        <div>
+            <Confirmation @ref="@Confirmation" OnEditConfirm="@EditMovie" OnDeleteConfirm="@DeleteMovie" MovieToEdit="@MovieToChange">
+                @if (Confirmation.ConfirmType == Enums.ConfirmType.Delete)
+                {
+                    <text> Are you sure you want to delete this movie? </text>
+                }
+                else
+                {
+                    <text> Edit this movie </text>
+                }
+            </Confirmation>
+        </div>
     </div>
 </div>

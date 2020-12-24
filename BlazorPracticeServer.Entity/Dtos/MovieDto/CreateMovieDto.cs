@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorPracticeServer.Entity;
 
-namespace BlazorPractice.Api.Dto.Movie
+namespace BlazorPracticeServer.Entity.Dtos.MovieDto
 {
-    public class ReadMovieDto
+    public class CreateMovieDto
     {
         public int Id { get; set; }
         [Required] public string Title { get; set; }
@@ -15,5 +16,8 @@ namespace BlazorPractice.Api.Dto.Movie
         [Required] public string Poster { get; set; }
         [Required] public bool InTheater { get; set; }
         [Required] public string Trailer { get; set; }
+
+        public IEnumerable<MovieGenre> MovieGenres { get; set; }
+        public IEnumerable<MoviePerson> MoviePeople { get; set; }
     }
 }

@@ -1,36 +1,59 @@
 ﻿@page "/movie/detail/{MovieId:int}"
 @page "/movie/detail/{MovieId:int}/{MovieTitle}"
-@inject IRepository Repository
+@using BlazorPracticeServer.Services
 
-<div style=" width: 100%; display: inline-flex; flex-direction:row; justify-content:space-around">
-    <div>
-        <img style="width: 400px; height:600px" src="@_movie.Poster" alt="Poster" class="movie-poster" />
-    </div>
-    <div>
-        <h3>@_movie.Title</h3>
-        <h3>@_movie.ReleaseDate</h3>
-        <h3>@_movie.Genre.Name</h3>
-    </div>
+@if (_movie != null)
+{
+    <div style=" width: 100%; display: inline-flex; flex-direction:row; justify-content:space-around">
+        <div>
+            <img style="width: 400px; height:600px" src="@_movie.Poster" alt="Poster" class="movie-poster" />
+        </div>
+        <div>
+            <h3>@_movie.Title</h3>
+            <h3>@_movie.ReleaseDate</h3>
+            <h3> Genre </h3>
+            @if (_movie.MovieGenres != null)
+            {
+                foreach(var movieGenre in _movie.MovieGenres)
+                {
+                    <p> @movieGenre.GenreId</p>
+                }
+            }
+        </div>
 
-</div>
-<div style="margin:auto">
-    <div>
-        <h3>Casting</h3>
-        <h3>Screenshots</h3>
-        <h3>Review</h3>
     </div>
-</div>
+    <div style="margin:auto">
+        <div>
+            <h3>Casting</h3>
+            @if (_movie.MoviePeople != null)
+            {
+                foreach (var person in _movie.MoviePeople)
+                {
+                    <p>@person.Person.Name</p>
+                }
+            }
+            <h3>Screenshots</h3>
+            <h3>Review</h3>
+        </div>
+    </div>
+}
+else
+{
+    <p>loading...</p>
+}
+
 
 @code {
     [Parameter]
     public int MovieId { get; set; }
     [Parameter]
     public string MovieTitle { get; set; }
-
+    [Inject]
+    public IMovieService MovieService { get; set; }
     private Movie _movie = new Movie();
 
     protected async override Task OnInitializedAsync()
     {
-        _movie = Repository.Movies.FirstOrDefault(m => m.Id == MovieId);
+        _movie = await MovieService.RetrieveMovieByIdAsync(MovieId);
     }
 }

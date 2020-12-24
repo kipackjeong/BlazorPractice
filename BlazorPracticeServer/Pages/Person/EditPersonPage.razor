@@ -1,26 +1,38 @@
 ﻿@page "/person/edit/{PersonId:int}"
 @using BlazorPracticeServer.Components.PersonComp
-<h3>EditPersonPage</h3>
+@using BlazorPracticeServer.Services
+
 
 @if (Person != null)
 {
+    <h3>@Person.Name</h3>
+
     <PersonForm Person="Person" OnValidSubmit="EditPerson"></PersonForm>
+}
+else
+{
+    <text>loading</text>
 }
 
 
 @code {
     [Parameter]
     public int PersonId { get; set; }
+    [Inject]
+    public IPersonService PersonService { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    public Person Person { get; set; }
 
-    public Person Person { get; set; } = new Person();
 
     protected async override Task OnInitializedAsync()
     {
-        Person = new Person() {Id = 1, Name = "Kipack", DateOfBirth = DateTime.Today, Biography = "something"};
+        Person = await PersonService.RetrievePersonByIdAsync(PersonId);
     }
 
-    private void EditPerson()
+    private async Task EditPerson()
     {
-        Console.WriteLine("Editing Person...");
+        await PersonService.UpdatePersonAsync(Person, PersonId);
+        NavigationManager.NavigateTo("/people");
     }
 }

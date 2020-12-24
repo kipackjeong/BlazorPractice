@@ -1,24 +1,28 @@
 ﻿@page "/movie/create"
 @inject NavigationManager NavigationManager
-@inject IRepository Repository
-@inject IMovieService MovieService   
+@inject IMovieService MovieService
 @using BlazorPracticeServer.Components.MovieComp
+@using BlazorPracticeServer.Models.Arguments
 @using BlazorPracticeServer.Services
 
 
 
-<MovieForm Movie="Movie" OnValidSubmit="@(()=>CreateMovie(Movie))"/>
+<MovieForm Movie="Movie" OnValidSubmit="CreateMovie" />
 
 @code {
     public Movie Movie { get; set; } = new Movie();
+    public OnMovieSubmitArgs OnMovieSubmitArgs { get; set; } = new OnMovieSubmitArgs();
 
 
+    protected override void OnInitialized()
+    {
+        OnMovieSubmitArgs.Movie = Movie;
+    }
 
-    private void CreateMovie(Movie movie)
+    private async Task CreateMovie()
     {
         // saving movie..
-        MovieService.RegisterMovieAsync(movie);
-        Repository.Movies.Add(movie);
-        NavigationManager.NavigateTo("/");
+        await MovieService.RegisterMovieAsync(Movie);
+        
     }
 }

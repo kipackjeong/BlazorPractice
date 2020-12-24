@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
@@ -17,9 +18,15 @@ namespace BlazorPractice.Api.Data.Concrete
         }
 
 
-        public IEnumerable<Movie> GetAllMovie()
+        public AllMoviesDto GetAllMovie()
         {
-            return _context.Movies.ToList();
+            var movieIndex = new AllMoviesDto();
+            var todayDate = DateTime.UtcNow;
+            movieIndex.InTheatersMovies = _context.Movies.Where(m => m.InTheater).OrderBy(m => m.ReleaseDate).ToList();
+            movieIndex.UpcomingMovies = _context.Movies.Where(m => m.ReleaseDate > todayDate).ToList();
+            movieIndex.OldMovies = _context.Movies.Where(m => !m.InTheater && m.ReleaseDate < todayDate).ToList();
+
+            return movieIndex;
         }
 
         public Movie GetMovieById(int id)
@@ -27,9 +34,15 @@ namespace BlazorPractice.Api.Data.Concrete
             return _context.Movies.FirstOrDefault(m => m.Id == id);
         }
 
+
+        public IEnumerable<Movie> GetAllMovieByName(string movieName)
+        {
+            return _context.Movies.Where(m => movieName != null && m.Title.ToLower().Contains(movieName.ToLower())).Take(10);
+        }
+
         public void CreateMovie(Movie movie)
         {
-            _context.Add(movie);
+            _context.Movies.Add(movie);
         }
 
         public void UpdateMovie(Movie movie)
@@ -39,7 +52,7 @@ namespace BlazorPractice.Api.Data.Concrete
 
         public void DeleteMovie(Movie movie)
         {
-            _context.Remove(movie);
+            _context.Movies.Remove(movie);
         }
 
         public bool SaveChanges()

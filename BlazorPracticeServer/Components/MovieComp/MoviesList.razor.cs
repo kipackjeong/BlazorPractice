@@ -15,7 +15,7 @@ namespace BlazorPracticeServer.Components.MovieComp
 
         #region Parameters
         [Parameter] public List<Entity.Movie> Movies { get; set; }
-
+        [Parameter] public string Label { get; set; }
         #endregion
         public Confirmation Confirmation { get; set; }
 

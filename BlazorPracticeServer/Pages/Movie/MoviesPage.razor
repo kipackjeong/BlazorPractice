@@ -1,44 +1,43 @@
 ﻿@page "/"
 @using BlazorPracticeServer.Components.MovieComp
+@using BlazorPracticeServer.Entity.Dtos.MovieDto
 @using BlazorPracticeServer.Services
 @* Search Bar *@
 <div style="margin-top: 5%">
-    <EditForm Model="_movies">
+    @*<EditForm Model="_movies">
         <InputText type="text" class="form-control" @bind-Value="@SearchTitle" placeholder="Title of movie to search">
         </InputText>
-    </EditForm>
+    </EditForm>*@
 </div>
 
 @* Carousel *@
 <div id="movies-carousel">
-    <div style="padding-top: 5%">
-        <h2 class="text-capitalize"> Now Playing </h2>
-        <MoviesCarousel Movies="_movies">
-        </MoviesCarousel>
-    </div>
+    <h2 class="text-capitalize"> Now Playing </h2>
+    <MoviesCarousel Movies="_inTheaterMovies">
+    </MoviesCarousel>
 </div>
 
 @* Movies List *@
-<MoviesList Movies="_movies">
+<MoviesList Movies="_upComingMovies" Label="Upcoming Movies">
 </MoviesList>
-
-<MoviesList Movies="_moviesTest">
-</MoviesList>
+<MoviesList Movies="_oldMovies" Label="Old Movies"/>
 
 
 @code{
-    [Inject] public IRepository Repository { get; set; }
     [Inject] public IMovieService MovieService { get; set; }
 
+    private List<Movie> _inTheaterMovies = new List<Movie>();
+    private List<Movie> _upComingMovies = new List<Movie>();
+    private List<Movie> _oldMovies = new List<Movie>();
 
-    private List<Movie> _moviesTest;
-    private List<Movie> _movies;
     private string SearchTitle { get; set; } = "";
 
 
     protected async override Task OnInitializedAsync()
     {
-        _movies = Repository.Movies;
-        _moviesTest = (await MovieService.RetrieveAllMovieAsync()).ToList();
+        AllMoviesDto allMovie = await MovieService.RetrieveAllMovieAsync();
+        _inTheaterMovies = allMovie.InTheatersMovies;
+        _upComingMovies = allMovie.UpcomingMovies;
+        _oldMovies = allMovie.OldMovies;
     }
 }

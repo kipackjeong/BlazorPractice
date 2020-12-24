@@ -5,12 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorPracticeServer.Entity;
 
-namespace BlazorPractice.Api.Dto.Genre
+namespace BlazorPracticeServer.Entity.Dtos.GenreDto
 {
-    public class UpdateGenreDto
+    public class CreateGenreDto
     {
         [Required(ErrorMessage = "This field is required")]
         public string Name { get; set; }
-        public ICollection<MovieGenre> MovieGenres { get; set; }
     }
 }

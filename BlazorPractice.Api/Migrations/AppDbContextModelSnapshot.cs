@@ -84,6 +84,50 @@ namespace BlazorPractice.Api.Migrations
                     b.ToTable("MovieGenres");
                 });
 
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MoviePerson", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Character")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MovieId", "PersonId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("MoviePeople");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("People");
+                });
+
             modelBuilder.Entity("BlazorPracticeServer.Entity.MovieGenre", b =>
                 {
                     b.HasOne("BlazorPracticeServer.Entity.Genre", "Genre")
@@ -103,6 +147,25 @@ namespace BlazorPractice.Api.Migrations
                     b.Navigation("Movie");
                 });
 
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MoviePerson", b =>
+                {
+                    b.HasOne("BlazorPracticeServer.Entity.Movie", "Movie")
+                        .WithMany("MoviePeople")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlazorPracticeServer.Entity.Person", "Person")
+                        .WithMany("MoviePeople")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("BlazorPracticeServer.Entity.Genre", b =>
                 {
                     b.Navigation("MovieGenres");
@@ -111,6 +174,13 @@ namespace BlazorPractice.Api.Migrations
             modelBuilder.Entity("BlazorPracticeServer.Entity.Movie", b =>
                 {
                     b.Navigation("MovieGenres");
+
+                    b.Navigation("MoviePeople");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Person", b =>
+                {
+                    b.Navigation("MoviePeople");
                 });
 #pragma warning restore 612, 618
         }

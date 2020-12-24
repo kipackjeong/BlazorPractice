@@ -16,6 +16,7 @@ using BlazorPractice.Api.Data.Concrete;
 using BlazorPractice.Api.Data.Contract;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using BlazorPractice.Api.Helper;
 using Newtonsoft.Json.Serialization;
 
 namespace BlazorPractice.Api
@@ -39,9 +40,13 @@ namespace BlazorPractice.Api
             });
             AddData(services);
 
+            services.AddScoped<IFileStorageService, AzureStorageService>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers().AddNewtonsoftJson(s =>
             {
+                s.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
         }
@@ -51,6 +56,7 @@ namespace BlazorPractice.Api
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("LocalDb")));
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

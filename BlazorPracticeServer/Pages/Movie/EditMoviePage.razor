@@ -1,7 +1,7 @@
 ﻿@page "/movie/edit/{MovieId:int}"
 @page "/movie/edit/{MovieId:int}/{MovieTitle}"
-@inject IRepository Repository
 @using BlazorPracticeServer.Components.MovieComp 
+@using BlazorPracticeServer.Services
 
 
 <h3>EditMoviePage</h3>
@@ -12,19 +12,23 @@
 
 
 @code {
+
+    [Inject]
+    public IMovieService MovieService { get; set; }
     [Parameter]
     public int MovieId { get; set; }
     [Parameter]
     public string MovieTitle { get; set; }
+    
 
     private Movie _movie { get; set; } = new Movie();
 
     protected override async Task OnInitializedAsync() =>
-        _movie = Repository.Movies.FirstOrDefault(m => m.Id == MovieId);
+        _movie = await MovieService.RetrieveMovieByIdAsync(MovieId);
 
 
     private async Task EditMovie()
     {
-        Console.WriteLine("Movie Edited");
+        await MovieService.UpdateMovieAsync(_movie, _movie.Id);
     }
 }

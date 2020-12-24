@@ -1,5 +1,6 @@
 ﻿@page "/person/create" 
 @using BlazorPracticeServer.Components.PersonComp
+@using BlazorPracticeServer.Services
 
 <h3>CreatePersonPage</h3>
 <PersonForm Person="Person" OnValidSubmit="CreatePerson">
@@ -7,11 +8,16 @@
 
 
 @code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    [Inject]
+    public IPersonService PersonService { get; set; }
     Person Person = new Person();
 
-    private void CreatePerson()
+    private async Task CreatePerson()
     {
-        Console.WriteLine("Created a person");
+        await PersonService.RegisterPersonAsync(Person);
+        NavigationManager.NavigateTo("/people");
     }
 
 }
