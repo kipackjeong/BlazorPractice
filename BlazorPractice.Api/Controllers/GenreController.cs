@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.GenreDto;
 using Microsoft.AspNetCore.JsonPatch;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace BlazorPractice.Api.Controllers
 {
@@ -53,7 +48,7 @@ namespace BlazorPractice.Api.Controllers
 
             ReadGenreDto readGenreDto = _mapper.Map<ReadGenreDto>(genre);
 
-            return CreatedAtRoute(nameof(GetGenreById), new { id = genre.Id },readGenreDto);
+            return CreatedAtRoute(nameof(GetGenreById), new { id = genre.Id }, readGenreDto);
         }
 
         [HttpPut("{id}")]

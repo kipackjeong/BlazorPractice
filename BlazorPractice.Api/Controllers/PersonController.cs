@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BlazorPractice.Api.Data.Contract;
 using BlazorPractice.Api.Helper;
 using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.PersonDto;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -48,7 +47,7 @@ namespace BlazorPractice.Api.Controllers
 
         [HttpGet("search/{searchText}")]
         public async ValueTask<ActionResult<IEnumerable<ReadPersonDto>>> GetAllPersonByName(string searchText)
-        { 
+        {
             if (string.IsNullOrWhiteSpace(searchText))
             {
                 return new List<ReadPersonDto>();
@@ -126,7 +125,7 @@ namespace BlazorPractice.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteMovie(int id)
         {
-            Person  person = _repo.GetPersonById(id);
+            Person person = _repo.GetPersonById(id);
             if (person == null)
             {
                 return NotFound();

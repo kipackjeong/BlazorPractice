@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BlazorPractice.Api.Data.Contract;
+﻿using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
@@ -21,11 +22,13 @@ namespace BlazorPractice.Api.Data.Concrete
         }
         public IEnumerable<Person> GetAllPersonByName(string searchText)
         {
-            return _context.People.Where(p => p.Name.ToLower().Contains(searchText.ToLower())); 
+            return _context.People.Where(p => p.Name.ToLower().Contains(searchText.ToLower()));
         }
         public Person GetPersonById(int id)
         {
-            return _context.People.FirstOrDefault(p => p.Id == id);
+            return _context.People
+                .Include(person => person.MoviePeople).ThenInclude(moviePerson => moviePerson.Movie)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void CreatePerson(Person person)

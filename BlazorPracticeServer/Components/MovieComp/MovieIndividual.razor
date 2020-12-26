@@ -6,17 +6,10 @@
         <a href="@_movieURL">
             <b>@_briefTitle</b> <br />
             <b>Release Date</b><br />
-            : @Movie.ReleaseDate.ToString("MMMM,dd yyyy")<br />
+            : @Movie.ReleaseDate?.ToString("MMMM,dd yyyy")<br />
         </a>
     </p>
     <br />
-    @if (DisplayButtons)
-    {
-        @*<div class="button-group" style="position: relative; margin-top: 30px">
-                <BSButton Color="Color.Info" @onclick="@(() => EditMoviePrompt.InvokeAsync(Movie))">Edit</BSButton>
-                <BSButton Color="Color.Danger" @onclick="@(() => DeleteMoviePrompt.InvokeAsync(Movie))">Delete</BSButton>
-            </div>*@
-    }
 
 </div>
 @code{

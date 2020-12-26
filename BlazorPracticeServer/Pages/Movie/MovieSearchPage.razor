@@ -1,27 +1,28 @@
 ﻿@page "/movie/search"
+
 @using BlazorPracticeServer.Components.MovieComp
 @using System.ComponentModel
 @using BlazorPracticeServer.Services
 
-<div class="form-inline">
+<EditForm Model="SearchedMovies" class="form-inline">
     <div class="form-group mb-2">
         <label for="title" class="sr-only"> Title</label>
-        <input type="text" class="form-control" id="title" placeholder="Movie Title"
-               @bind-value="@_searchTitle" @bind-value:event="oninput"
-               @onkeypress="@TitleKeyPress" />
+        
+        <InputText class="form-control" DisplayName="Movie Title" @bind-Value="@_searchTitle" @onchange="SearchForMovies"></InputText>
     </div>
 
     <div class="form-group mx-sm-3 mb-2">
-        <select class="form-control" @bind="_selectedGenre">
+        <InputSelect class="form-control" @bind-Value="@_selectedGenre" @onmouseout="SearchForMovies">
             <option value="0">
                 --Select a Genre
             </option>
             @foreach (var genre in Genres)
             {
-                <option value="@genre.Id">@genre.Name</option>
+                <option value="@genre.Id.ToString()">@genre.Name</option>
             }
-        </select>
+        </InputSelect>
     </div>
+    <h3> Genre : @_selectedGenre </h3>
 
     <div class="form-group mx-sm-3 mb-2">
         <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="_upcomingReleaseStatus" />
@@ -32,25 +33,20 @@
     <div class="form-group mx-sm-3 mb-2">
         <input type="checkbox" class="form-check-input" id="inTheaters" @bind="_inTheaterStatus" />
         <label class="form-check-label" for="inTheaters">
-            Upcoming Releases
+            In Theater
         </label>
     </div>
-</div>
+</EditForm>
 <BSButton Color="@Color.Light" @onclick="@SearchForMovies">Filter</BSButton>
 <BSButton Color="@Color.Light" @onclick="@Clear">Clear</BSButton>
 
-
-@if (_searchTitle == string.Empty)
-{
-    <MoviesList Movies="SearchedMovies"></MoviesList>
-}
-@if (SearchedMovies == null)
+@if (SearchedMovies == null || !SearchedMovies.Any())
 {
     <h3> No movie found </h3>
 }
 else
 {
-    <MoviesList Movies="SearchedMovies"></MoviesList>
+    <MoviesList Movies="SearchedMovies.ToList()"></MoviesList>
 }
 
 
@@ -66,7 +62,7 @@ else
 
     private Genre _genre = new Genre();
 
-    private List<Movie> SearchedMovies { get; set; } = new List<Movie>();
+    private HashSet<Movie> SearchedMovies { get; set; } = new HashSet<Movie>();
     private List<Genre> Genres { get; set; } = new List<Genre>();
 
     protected async override Task OnInitializedAsync()
@@ -74,24 +70,35 @@ else
         Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
     }
 
-    private async Task TitleKeyPress()
-    {
-        await SearchForMovies();
-    }
 
     private async Task SearchForMovies()
     {
-        if (_searchTitle.Length < 2)
-        {
-            return;
-        }
-        SearchedMovies = (await MovieService.RetrieveMovieByNameAsync(_searchTitle)).ToList();
-        await InvokeAsync(StateHasChanged);
+        if(_searchTitle != string.Empty)
+            SearchedMovies = (await MovieService.RetrieveMovieByNameAsync(_searchTitle)).ToHashSet();
         if (_selectedGenre != "0")
         {
             int selectedGenreInt = int.Parse(_selectedGenre);
-            //TODO : Filter movie by Genre
+            if (_searchTitle != string.Empty)
+            {
+                SearchedMovies = SearchedMovies
+                    .Where(movie => movie.MovieGenres
+                        .Any(movieGenre => movieGenre.Genre.Id == selectedGenreInt)
+                    )
+                    .ToHashSet();
+            }
+            else
+            {
+                SearchedMovies = (await GenreService
+                    .RetrieveGenreByIdAsync(selectedGenreInt))
+                    .MovieGenres
+                    .Select(movieGenre=> movieGenre.Movie)
+                    .ToHashSet() ;
+            }
+
         }
+
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private void Clear()

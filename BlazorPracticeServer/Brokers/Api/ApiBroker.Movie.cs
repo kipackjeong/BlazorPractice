@@ -1,7 +1,7 @@
 ﻿using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity.Dtos.MovieDto;
 
 namespace BlazorPracticeServer.Brokers.Api
 {
@@ -13,7 +13,7 @@ namespace BlazorPracticeServer.Brokers.Api
             await GetAllIndexAsync<AllMoviesDto>(_movieUrl);
 
         public async ValueTask<Movie> GetMovieByIdAsync(int id) =>
-            await GetAsync<Movie>(_movieUrl+$"/{id}");
+            await GetAsync<Movie>(_movieUrl + $"/{id}");
 
         public async ValueTask<IEnumerable<Movie>> GetAllMovieByName(string searchText) =>
             await GetAllFilteredAsync<Movie>(_movieUrl + $"/search/{searchText}");

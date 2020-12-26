@@ -1,5 +1,5 @@
 ﻿<li class="genre-@(nthGenre % 8)">
-    <a href="genre/edit/@Genre.Id">
+    <a href="movie/search?genreId=@Genre.Id">
         @Genre.Name
     </a>
     <i class="oi oi-delete" @onclick="@(()=>OnDeleteClicked.InvokeAsync(Genre.Id))"></i>

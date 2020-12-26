@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace BlazorPracticeServer.Entity
+﻿namespace BlazorPracticeServer.Entity
 {
     public class MoviePerson
     {

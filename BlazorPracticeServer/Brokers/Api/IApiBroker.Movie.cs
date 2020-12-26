@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using BlazorPracticeServer.Entity;
-using System.Threading.Tasks;
+﻿using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.MovieDto;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlazorPracticeServer.Brokers.Api
 {

@@ -32,9 +32,9 @@
             @* movies *@
             @if (Person.MoviePeople != null)
             {
-                foreach (var movie in Person.MoviePeople)
+                foreach (var moviePerson in Person.MoviePeople)
                 {
-                    <span> @movie.Movie.Title </span>
+                    <a href="/movie/detail/@moviePerson.Movie.Id"> @moviePerson.Movie.Title </a>
                 }
             }
             else

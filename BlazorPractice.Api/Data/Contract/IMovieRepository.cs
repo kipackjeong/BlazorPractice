@@ -1,7 +1,7 @@
 ﻿
-using System.Collections.Generic;
 using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.MovieDto;
+using System.Collections.Generic;
 
 namespace BlazorPractice.Api.Data.Contract
 {

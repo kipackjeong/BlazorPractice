@@ -21,12 +21,18 @@ h1, h2, h3 {
     color: white;
 }
 
+p {
+    color: white;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
-
+.top-row {
+    background: #0A0404
+}
 .page {
     background: #0A0404;
 }
@@ -66,10 +72,13 @@ h1, h2, h3 {
         top: 0.5rem;
     }
 
-/*#region MovieList */
 
+.movie-category {
+    text-align: center;
+}
+/*#region MovieList */
 #movies {
-    padding: 5rem 0;
+    width: 100%;
     background: rgba(0, 0, 0, 0.87);
 }
 
@@ -78,17 +87,18 @@ h1, h2, h3 {
     }
 
 .movies-list {
+    width:100%;
     padding: 3rem 0;
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
 }
 
     .movies-list .individual-movie-container {
         background-color: transparent;
+        width: 15%;
     }
-
     .movies-list .movie-poster {
-        width: 10rem;
+        margin: 2rem 0;
         height: 15rem;
     }
 
@@ -96,16 +106,14 @@ h1, h2, h3 {
     width: 100%;
 }
 
+
 .individual-movie-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     margin: 0.5rem;
-    width: 25%;
-    height: 25rem;
     background: rgba(0, 0, 0, 0.87);
-    ;
 }
 
 .movie-poster-cont {
@@ -132,7 +140,7 @@ h1, h2, h3 {
 /*#region Carousel */
 
 div#carousel {
-    margin: 10rem 0;
+    margin: 5rem 0;
     perspective: 3000px;
     font-size: 0;
     transform: scaleY(1);
@@ -282,8 +290,8 @@ div#carousel ~ span {
 .genres-list {
     margin: 0 auto;
     list-style-type: none;
-    width: 960px;
     text-align: center;
+    width : 40rem;
 }
 
     .genres-list li {
@@ -478,7 +486,7 @@ div#carousel ~ span {
     flex-direction: column;
     justify-content: space-between;
     align-content: center;
-    m color: white;
+    color: white;
 }
 
     #person-detail div {
@@ -519,5 +527,17 @@ div#carousel ~ span {
 .detailbot-bottom {
     width: 8.5rem;
 }
+
+/*#endregion */
+
+/*#region MovieDetail */
+#movie-detail {
+    
+}
+    #movie-detail .genres-list {
+        width: unset;
+
+    }
+
 
 /*#endregion */

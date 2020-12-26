@@ -4,14 +4,11 @@
 
 @if (Person != null)
 {
-    <PersonIndividual Person="Person" OnDeleteClicked="DeletePerson" OnEditClicked ="GoToEditPersonPage"></PersonIndividual>
+    <PersonDetail Person="Person" OnDeleteClicked="DeletePerson" OnEditClicked ="GoToEditPersonPage"></PersonDetail>
 }
 
 
 @code {
-
-
-    //TODO 1: DetailPersonPage
     [Inject] public IPersonService PersonService { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
     [Parameter] public int PersonId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity.Dtos.MovieDto;
 
 namespace BlazorPracticeServer.Services
 {

@@ -1,8 +1,8 @@
 ﻿using BlazorPracticeServer.Brokers.Api;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos.MovieDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlazorPracticeServer.Entity.Dtos.MovieDto;
 
 namespace BlazorPracticeServer.Services
 {
@@ -21,7 +21,7 @@ namespace BlazorPracticeServer.Services
 
         public async ValueTask<Movie> RetrieveMovieByIdAsync(int id) =>
             await _apiBroker.GetMovieByIdAsync(id);
-        
+
         public async ValueTask<IEnumerable<Movie>> RetrieveMovieByNameAsync(string searchText) =>
             await _apiBroker.GetAllMovieByName(searchText);
 

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using BlazorPractice.Api.Data.Concrete;
+﻿using AutoMapper;
 using BlazorPractice.Api.Data.Contract;
 using BlazorPractice.Api.Helper;
 using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.MovieDto;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlazorPractice.Api.Controllers
 {
@@ -31,7 +29,6 @@ namespace BlazorPractice.Api.Controllers
         [HttpGet]
         public async ValueTask<ActionResult<AllMoviesDto>> GetAllMovies()
         {
-
             var allMovieDto = _repo.GetAllMovie();
 
             return Ok(allMovieDto);

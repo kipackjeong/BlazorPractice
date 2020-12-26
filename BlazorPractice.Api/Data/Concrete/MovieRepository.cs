@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BlazorPractice.Api.Data.Contract;
+﻿using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
 using BlazorPracticeServer.Entity.Dtos.MovieDto;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
@@ -22,22 +22,44 @@ namespace BlazorPractice.Api.Data.Concrete
         {
             var movieIndex = new AllMoviesDto();
             var todayDate = DateTime.UtcNow;
-            movieIndex.InTheatersMovies = _context.Movies.Where(m => m.InTheater).OrderBy(m => m.ReleaseDate).ToList();
-            movieIndex.UpcomingMovies = _context.Movies.Where(m => m.ReleaseDate > todayDate).ToList();
-            movieIndex.OldMovies = _context.Movies.Where(m => !m.InTheater && m.ReleaseDate < todayDate).ToList();
+            movieIndex.InTheatersMovies =
+                _context.Movies
+                    .Where(m => m.InTheater)
+                    .OrderBy(m => m.ReleaseDate)
+                    .ToList();
+
+            movieIndex.UpcomingMovies =
+                _context.Movies
+                    .Where(m => m.ReleaseDate > todayDate)
+                    .ToList();
+            movieIndex.OldMovies =
+                _context.Movies
+                    .Where(m => !m.InTheater && m.ReleaseDate < todayDate)
+                    .ToList();
 
             return movieIndex;
         }
 
         public Movie GetMovieById(int id)
         {
-            return _context.Movies.FirstOrDefault(m => m.Id == id);
+            return _context.Movies
+                .Include(movie => movie.MovieGenres).ThenInclude(movieGenre => movieGenre.Genre)
+                .Include(movie => movie.MoviePeople).ThenInclude(moviePerson => moviePerson.Person)
+                .FirstOrDefault(m => m.Id == id);
         }
 
 
         public IEnumerable<Movie> GetAllMovieByName(string movieName)
         {
-            return _context.Movies.Where(m => movieName != null && m.Title.ToLower().Contains(movieName.ToLower())).Take(10);
+            return _context.Movies
+                .Where(movie => movieName != null 
+                                && movie.Title
+                                    .ToLower()
+                                    .Contains(movieName.ToLower())
+                                )
+                .Take(10)
+                .Include(movie => movie.MovieGenres).ThenInclude(movieGenre => movieGenre.Genre)
+                .Include(movie => movie.MoviePeople).ThenInclude(moviePeople => moviePeople.Person);
         }
 
         public void CreateMovie(Movie movie)
@@ -47,7 +69,7 @@ namespace BlazorPractice.Api.Data.Concrete
 
         public void UpdateMovie(Movie movie)
         {
-            
+
         }
 
         public void DeleteMovie(Movie movie)

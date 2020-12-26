@@ -1,0 +1,43 @@
+﻿@page "/movie/detail/{MovieId:int}"
+@page "/movie/detail/{MovieId:int}/{MovieTitle}"
+@using BlazorPracticeServer.Services
+
+@if (Movie != null)
+{
+    <MovieDetails Movie="Movie" Genres="Genres" OnEditClicked="GoToEditMoviePage" OnDeleteClicked="DeleteMovie">
+    </MovieDetails>
+}
+else
+{
+    <p> loading... </p>
+}
+
+
+
+@code {
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+
+    [Parameter] public int MovieId { get; set; }
+    [Parameter] public string MovieTitle { get; set; }
+
+    private Movie Movie { get; set; }
+    private List<Genre> Genres{ get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Movie = await MovieService.RetrieveMovieByIdAsync(MovieId);
+        Genres = Movie.MovieGenres.Select(movieGenre => movieGenre.Genre).ToList();
+    }
+
+    private async Task GoToEditMoviePage()
+    {
+        NavigationManager.NavigateTo($"/movie/edit/{MovieId}");
+    }
+
+    private async Task DeleteMovie()
+    {
+        await MovieService.DeleteMovieAsync(MovieId);
+        NavigationManager.NavigateTo("/");
+    }
+}

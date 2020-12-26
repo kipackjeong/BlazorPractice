@@ -22,8 +22,12 @@ namespace BlazorPracticeServer.Brokers.Api
         private async ValueTask<T> GetAsync<T>(string relativeUrl) =>
             await this._apiClient.GetContentAsync<T>(relativeUrl);
 
-        private async ValueTask<T> PostAsync<T>(string relativeUrl, T content) =>
-            await this._apiClient.PostContentAsync<T>(relativeUrl, content);
+        private async ValueTask<T> PostAsync<T>(string relativeUrl, T content)
+        {
+            T item = await this._apiClient.PostContentAsync<T>(relativeUrl, content);
+            return item;
+        }
+
 
         private async ValueTask<T> PutAsync<T>(string relativeUrl, T content) =>
             await this._apiClient.PutContentAsync<T>(relativeUrl, content);

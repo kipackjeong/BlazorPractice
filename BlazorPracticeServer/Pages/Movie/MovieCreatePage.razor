@@ -1,0 +1,33 @@
+﻿@page "/movie/create"
+@using BlazorPracticeServer.Components.MovieComp
+@using BlazorPracticeServer.Models.Arguments
+@using BlazorPracticeServer.Services
+
+
+@if (Movie != null)
+{
+    <MovieForm Movie="Movie" OnValidSubmit="CreateMovie" SelectedActors="new List<Person>()"/>
+}
+else
+{
+    <p>loading...</p>
+}
+
+
+@code {
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    public Movie Movie = new Movie();
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private async Task CreateMovie()
+    {
+        // saving movie..
+        Movie movieCreated = await MovieService.RegisterMovieAsync(Movie);
+        NavigationManager.NavigateTo($"/movie/detail/{movieCreated.Id}");
+
+    }
+}

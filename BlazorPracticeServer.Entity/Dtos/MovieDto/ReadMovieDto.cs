@@ -6,6 +6,7 @@ namespace BlazorPracticeServer.Entity.Dtos.MovieDto
 {
     public class ReadMovieDto
     {
+        public int Id{ get; set; }
         [Required] public string Title { get; set; }
         [Required] public string Summary { get; set; }
         [Required] public DateTime ReleaseDate { get; set; }

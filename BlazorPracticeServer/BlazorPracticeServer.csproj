@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Movie\CreateMoviePage.razor" />
+    <None Include="Pages\Movie\MovieCreatePage.razor" />
   </ItemGroup>
 
   <ItemGroup>
