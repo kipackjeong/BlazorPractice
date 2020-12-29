@@ -9,7 +9,7 @@ namespace BlazorPracticeServer.Brokers.Api
     {
         ValueTask<AllMoviesDto> GetAllMovieAsync();
         ValueTask<Movie> GetMovieByIdAsync(int id);
-        ValueTask<IEnumerable<Movie>> GetAllMovieByName(string searchText);
+        ValueTask<IEnumerable<Movie>> GetAllMovieAsync(string searchFilter);
         ValueTask<Movie> PostMovieAsync(Movie movie);
         ValueTask<Movie> PutMovieAsync(Movie movie, int id);
         ValueTask<Movie> DeleteMovieAsync(int id);

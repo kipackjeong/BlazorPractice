@@ -8,14 +8,14 @@ namespace BlazorPracticeServer.Brokers.Api
     {
         private const string _personUrl = "/api/person";
 
-        public async ValueTask<IEnumerable<Person>> GetAllPersonAsync() =>
-            await GetAllAsync<Person>(_personUrl);
+        public async ValueTask<IEnumerable<Person>> GetAllPersonAsync(string queryString) =>
+            await GetAllAsync<Person>(_personUrl + queryString);
 
         public async ValueTask<Person> GetPersonByIdAsync(int id) =>
             await GetAsync<Person>(_personUrl + $"/{id}");
 
         public async ValueTask<IEnumerable<Person>> GetAllPeopleByName(string searchText) =>
-            await GetAllFilteredAsync<Person>(_personUrl + $"/search/{searchText}");
+            await GetAllAsync<Person>(_personUrl + $"/search/{searchText}");
 
         public async ValueTask<Person> PostPersonAsync(Person person) =>
             await PostAsync(_personUrl, person);

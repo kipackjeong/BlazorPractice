@@ -4,8 +4,11 @@
 
 @if (Movie != null)
 {
-    <MovieDetails Movie="Movie" Genres="Genres" OnEditClicked="GoToEditMoviePage" OnDeleteClicked="DeleteMovie">
-    </MovieDetails>
+    <div style="padding: 5rem 0 ;">
+        <MovieDetails Movie="Movie" Genres="Genres" OnEditClicked="GoToEditMoviePage" OnDeleteClicked="DeleteMovie">
+        </MovieDetails>
+    </div>
+
 }
 else
 {

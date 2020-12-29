@@ -22,9 +22,8 @@ namespace BlazorPracticeServer.Services
         public async ValueTask<Movie> RetrieveMovieByIdAsync(int id) =>
             await _apiBroker.GetMovieByIdAsync(id);
 
-        public async ValueTask<IEnumerable<Movie>> RetrieveMovieByNameAsync(string searchText) =>
-            await _apiBroker.GetAllMovieByName(searchText);
-
+        public async ValueTask<IEnumerable<Movie>> RetrieveMovieByFilterAsync(FilterMovieDto filterMovieDto) =>
+            await _apiBroker.GetAllMovieAsync($"/filter?Title={filterMovieDto.Title}&GenreId={filterMovieDto.GenreId}&InTheaters={filterMovieDto.InTheaters}&UpcomingReleases={filterMovieDto.UpcomingReleases}");
 
         public async ValueTask<Movie> RegisterMovieAsync(Movie movie) =>
             await _apiBroker.PostMovieAsync(movie);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlazorPracticeServer.Entity.Dtos;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,10 +29,10 @@ namespace BlazorPractice.Api.Controllers
             _fileStorageService = fileStorageService;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Person>> GetAllPerson()
+        public ActionResult<IEnumerable<Person>> GetAllPerson([FromQuery]PaginationDto paginationDto)
         {
-            var people = _repo.GetAllPerson();
-            return Ok(_mapper.Map<IEnumerable<Person>>(people));
+            var people = _repo.GetAllPerson(paginationDto);
+            return Ok(people);
         }
 
         [HttpGet("{id}", Name = "GetPersonById")]

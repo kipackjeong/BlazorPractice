@@ -2,15 +2,14 @@
     <a class="movie-poster-cont" href="@_movieURL ">
         <img src="@Movie.Poster" alt="Poster" class="movie-poster" />
     </a>
-    <p style="color: white">
-        <a href="@_movieURL">
-            <b>@_briefTitle</b> <br />
-            <b>Release Date</b><br />
-            : @Movie.ReleaseDate?.ToString("MMMM,dd yyyy")<br />
-        </a>
-    </p>
+    <a href="@_movieURL">
+        <p>
+            <h3 style="height: 3rem">@Movie.Title </h3> <br/>
+            @Movie.ReleaseDate?.ToString("MMMM,dd yyyy")<br/>
+        </p>
+        
+    </a>
     <br />
-
 </div>
 @code{
     [Parameter]
@@ -18,10 +17,6 @@
     [Parameter]
     public bool DisplayButtons { get; set; }
     // event callback, bring the method from parent component, and on certain condition, invoke it.
-    [Parameter] public EventCallback<Movie> DeleteMoviePrompt { get; set; }
-    [Parameter] public EventCallback<Movie> EditMoviePrompt { get; set; }
-
-    private string _briefTitle = string.Empty;
 
     private string _movieURL = string.Empty;
 
@@ -32,6 +27,6 @@
     protected override void OnParametersSet()
     {
         // shorten the title that has length over 10
-        _briefTitle = Movie.Title.Length < 10 ? Movie.Title : Movie.Title.Substring(0, 10);
+
     }
 }

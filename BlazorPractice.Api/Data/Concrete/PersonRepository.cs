@@ -3,6 +3,7 @@ using BlazorPracticeServer.Entity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using BlazorPracticeServer.Entity.Dtos;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
@@ -16,9 +17,11 @@ namespace BlazorPractice.Api.Data.Concrete
         }
 
 
-        public IEnumerable<Person> GetAllPerson()
+        public IEnumerable<Person> GetAllPerson(PaginationDto paginationDto)
         {
-            return _context.People.ToList();
+            return _context.People
+                .Skip((paginationDto.PageNumber - 1) * (paginationDto.RecordsPerPage))
+                .Take(paginationDto.RecordsPerPage);
         }
         public IEnumerable<Person> GetAllPersonByName(string searchText)
         {

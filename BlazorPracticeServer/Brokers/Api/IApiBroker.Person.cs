@@ -6,7 +6,7 @@ namespace BlazorPracticeServer.Brokers.Api
 {
     public partial interface IApiBroker
     {
-        ValueTask<IEnumerable<Person>> GetAllPersonAsync();
+        ValueTask<IEnumerable<Person>> GetAllPersonAsync(string queryString);
 
         ValueTask<Person> GetPersonByIdAsync(int id);
 

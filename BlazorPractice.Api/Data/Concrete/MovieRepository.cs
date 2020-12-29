@@ -40,6 +40,41 @@ namespace BlazorPractice.Api.Data.Concrete
             return movieIndex;
         }
 
+        public IEnumerable<Movie> GetAllFilteredMovies(FilterMovieDto filterMovieDto)
+        {
+            var moviesQueryable = _context.Movies.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(filterMovieDto.Title))
+            {
+                moviesQueryable = moviesQueryable
+                    .Where(movie => movie.Title
+                        .Contains(filterMovieDto.Title));
+            }
+
+            if (filterMovieDto.InTheaters)
+            {
+                moviesQueryable = moviesQueryable
+                    .Where(movie => movie.InTheater);
+            }
+
+            if (filterMovieDto.UpcomingReleases)
+            {
+                moviesQueryable = moviesQueryable
+                    .Where(movie => movie.ReleaseDate > DateTime.Today);
+            }
+
+            if (filterMovieDto.GenreId != 0)
+            {
+                moviesQueryable = moviesQueryable
+                    .Where(movie =>
+                        movie.MovieGenres
+                            .Select(movieGenres => movieGenres.GenreId)
+                            .Contains(filterMovieDto.GenreId)
+                    );
+            }
+
+            return moviesQueryable.ToList();
+        }
+
         public Movie GetMovieById(int id)
         {
             return _context.Movies

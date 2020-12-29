@@ -17,22 +17,6 @@ namespace BlazorPracticeServer.Components.MovieComp
 
         public Movie MovieToChange { get; set; }
 
-        private async Task DeleteMoviePrompt(Movie movie)
-        {
-            MovieToChange = movie;
-        }
-
-        private async Task DeleteMovie()
-        {
-            Movies.Remove(MovieToChange);
-            MovieToChange = null;
-        }
-
-        private async Task EditMoviePrompt(Movie movie)
-        {
-            MovieToChange = movie;
-        }
-
         protected async override Task OnInitializedAsync()
         {
             MovieToChange = new Movie();

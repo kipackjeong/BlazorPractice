@@ -10,6 +10,7 @@ namespace BlazorPractice.Api.Data.Contract
         AllMoviesDto GetAllMovie();
         Movie GetMovieById(int id);
         IEnumerable<Movie> GetAllMovieByName(string movieName);
+        IEnumerable<Movie> GetAllFilteredMovies(FilterMovieDto filterMovieDto);
         void CreateMovie(Movie movie);
         void UpdateMovie(Movie movie);
         void DeleteMovie(Movie movie);

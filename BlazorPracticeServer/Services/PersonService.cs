@@ -2,6 +2,7 @@
 using BlazorPracticeServer.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlazorPracticeServer.Entity.Dtos;
 
 namespace BlazorPracticeServer.Services
 {
@@ -15,8 +16,8 @@ namespace BlazorPracticeServer.Services
             _apiBroker = apiBroker;
         }
 
-        public async ValueTask<IEnumerable<Person>> RetrieveAllPersonAsync() =>
-            await _apiBroker.GetAllPersonAsync();
+        public async ValueTask<IEnumerable<Person>> RetrieveAllPersonAsync(PaginationDto paginationDto) =>
+            await _apiBroker.GetAllPersonAsync($"?PageNumber={paginationDto.PageNumber}&RecordsPerPage={paginationDto.RecordsPerPage}");
 
         public async ValueTask<Person> RetrievePersonByIdAsync(int id) =>
             await _apiBroker.GetPersonByIdAsync(id);

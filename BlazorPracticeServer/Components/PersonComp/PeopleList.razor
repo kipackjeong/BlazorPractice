@@ -1,0 +1,29 @@
+﻿
+<BSContainer>
+    <GenericList List="People">
+        <ChildContent Context="person">
+            <BSRow style="color:white">
+                <BSCol> <img src="@person.Picture" style="width: 5rem; height: 5rem;" /></BSCol>
+                <BSCol>@person.Name</BSCol>
+                <BSCol>
+                    <BSButtonGroup>
+                        <BSButton Color="Color.Light" @onclick="@(()=> OnEditClicked.InvokeAsync(person.Id))">Edit</BSButton>
+                        <BSButton Color="Color.Danger" @onclick="@(()=> OnDeleteClicked.InvokeAsync(person.Id))">Delete</BSButton>
+                    </BSButtonGroup>
+                </BSCol>
+            </BSRow>
+        </ChildContent>
+    </GenericList>
+</BSContainer>
+
+
+
+
+@code {
+    [Parameter] public List<Person> People { get; set; }
+    [Parameter]
+    public EventCallback<int> OnEditClicked { get; set; }
+    [Parameter]
+    public EventCallback<int> OnDeleteClicked { get; set; }
+}
+

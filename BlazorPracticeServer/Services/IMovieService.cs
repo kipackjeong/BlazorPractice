@@ -9,7 +9,7 @@ namespace BlazorPracticeServer.Services
     {
         ValueTask<AllMoviesDto> RetrieveAllMovieAsync();
         ValueTask<Movie> RetrieveMovieByIdAsync(int id);
-        ValueTask<IEnumerable<Movie>> RetrieveMovieByNameAsync(string searchText);
+        ValueTask<IEnumerable<Movie>> RetrieveMovieByFilterAsync(FilterMovieDto filterMovieDto);
         ValueTask<Movie> RegisterMovieAsync(Movie movie);
         ValueTask<Movie> UpdateMovieAsync(Movie movie, int id);
         ValueTask<Movie> DeleteMovieAsync(int id);

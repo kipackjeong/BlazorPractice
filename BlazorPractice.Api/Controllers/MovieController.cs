@@ -45,6 +45,18 @@ namespace BlazorPractice.Api.Controllers
             return NotFound();
         }
 
+        [HttpGet("filter")]
+        public async ValueTask<ActionResult<IEnumerable<ReadMovieDto>>> GetAllFilteredMovies([FromQuery]FilterMovieDto filterMovieDto)
+        {
+            var filteredMovies = _repo.GetAllFilteredMovies(filterMovieDto);
+            if (!filteredMovies.Any())
+            {
+                return Ok(new List<ReadMovieDto>());
+            }
+            var filteredReadMovieDto = _mapper.Map<IEnumerable<ReadMovieDto>>(filteredMovies);
+            return Ok(filteredReadMovieDto);
+        }
+
         [HttpGet("search/{searchText}")]
         public async ValueTask<ActionResult<IEnumerable<ReadMovieDto>>> GetAllMovieByName(string searchText)
         {

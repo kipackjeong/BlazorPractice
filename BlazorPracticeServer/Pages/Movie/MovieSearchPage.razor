@@ -2,17 +2,19 @@
 
 @using BlazorPracticeServer.Components.MovieComp
 @using System.ComponentModel
+@using BlazorPracticeServer.Entity.Dtos.MovieDto
 @using BlazorPracticeServer.Services
+@using BlazorPracticeServer.Helper
 
-<EditForm Model="SearchedMovies" class="form-inline">
+<EditForm Model="FilterMovieDto" class="form-inline">
     <div class="form-group mb-2">
         <label for="title" class="sr-only"> Title</label>
         
-        <InputText class="form-control" DisplayName="Movie Title" @bind-Value="@_searchTitle" @onchange="SearchForMovies"></InputText>
+        <InputText class="form-control" DisplayName="Movie Title" @bind-Value="FilterMovieDto.Title" @onchange="SearchForMovies"></InputText>
     </div>
 
     <div class="form-group mx-sm-3 mb-2">
-        <InputSelect class="form-control" @bind-Value="@_selectedGenre" @onmouseout="SearchForMovies">
+        <InputSelect class="form-control" @bind-Value="FilterMovieDto.GenreId" @onmouseout="SearchForMovies">
             <option value="0">
                 --Select a Genre
             </option>
@@ -25,13 +27,13 @@
     <h3> Genre : @_selectedGenre </h3>
 
     <div class="form-group mx-sm-3 mb-2">
-        <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="_upcomingReleaseStatus" />
+        <input type="checkbox" class="form-check-input" id="upcomingReleases" @bind="FilterMovieDto.UpcomingReleases" />
         <label class="form-check-label" for="upcomingReleases">
             Upcoming Releases
         </label>
     </div>
     <div class="form-group mx-sm-3 mb-2">
-        <input type="checkbox" class="form-check-input" id="inTheaters" @bind="_inTheaterStatus" />
+        <input type="checkbox" class="form-check-input" id="inTheaters" @bind="FilterMovieDto.InTheaters" />
         <label class="form-check-label" for="inTheaters">
             In Theater
         </label>
@@ -53,7 +55,8 @@ else
 @code {
     [Inject] public IMovieService MovieService { get; set; }
     [Inject] public IGenreService GenreService { get; set; }
-
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    public FilterMovieDto FilterMovieDto { get; set; } = new FilterMovieDto();
 
     private string _searchTitle = "";
     private string _selectedGenre = "0";
@@ -62,40 +65,31 @@ else
 
     private Genre _genre = new Genre();
 
-    private HashSet<Movie> SearchedMovies { get; set; } = new HashSet<Movie>();
+    private List<Movie> SearchedMovies { get; set; } = new List<Movie>();
     private List<Genre> Genres { get; set; } = new List<Genre>();
 
     protected async override Task OnInitializedAsync()
     {
+        var queryStrings = NavigationManager.GetQueryString(NavigationManager.Uri);
         Genres = (await GenreService.RetrieveAllGenreAsync()).ToList();
-    }
 
+        if (queryStrings != null)
+        {
+            FillFilterWithQueryStrings(queryStrings);
+            await SearchForMovies();
+        }
+
+    }
 
     private async Task SearchForMovies()
     {
-        if(_searchTitle != string.Empty)
-            SearchedMovies = (await MovieService.RetrieveMovieByNameAsync(_searchTitle)).ToHashSet();
-        if (_selectedGenre != "0")
+        var queryString = GenerateQueryString();
+        if (!string.IsNullOrWhiteSpace(queryString))
         {
-            int selectedGenreInt = int.Parse(_selectedGenre);
-            if (_searchTitle != string.Empty)
-            {
-                SearchedMovies = SearchedMovies
-                    .Where(movie => movie.MovieGenres
-                        .Any(movieGenre => movieGenre.Genre.Id == selectedGenreInt)
-                    )
-                    .ToHashSet();
-            }
-            else
-            {
-                SearchedMovies = (await GenreService
-                    .RetrieveGenreByIdAsync(selectedGenreInt))
-                    .MovieGenres
-                    .Select(movieGenre=> movieGenre.Movie)
-                    .ToHashSet() ;
-            }
-
+            queryString = $"?{queryString}";
+            NavigationManager.NavigateTo("movie/search" + queryString);
         }
+        SearchedMovies = (await MovieService.RetrieveMovieByFilterAsync(FilterMovieDto)).ToList();
 
 
         await InvokeAsync(StateHasChanged);
@@ -107,5 +101,48 @@ else
         _selectedGenre = string.Empty;
         _upcomingReleaseStatus = false;
         _inTheaterStatus = false;
+    }
+    private string GenerateQueryString()
+    {
+        var queryStringsDict = new Dictionary<string, string>();
+        queryStringsDict["genreId"] = FilterMovieDto.GenreId.ToString();
+        queryStringsDict["title"] = FilterMovieDto.Title ?? "";
+        queryStringsDict["inTheaters"] = FilterMovieDto.InTheaters.ToString();
+        queryStringsDict["upcomingReleases"] = FilterMovieDto.UpcomingReleases.ToString();
+
+        var defaultValue = new List<string>() {"false", "", "0"};
+
+        return string.Join("&", queryStringsDict
+            .Where(x=> !defaultValue.Contains(x.Value.ToLower()))
+            .Select(x=> $"{x.Key}={System.Web.HttpUtility.UrlEncode(x.Value)}").ToArray())
+        ;
+    }
+
+    private void FillFilterWithQueryStrings(Dictionary<string, string> queryStrings)
+    {
+        if (queryStrings.ContainsKey("genreId"))
+        {
+            FilterMovieDto.GenreId = int.Parse(queryStrings["genreId"]);
+        }
+
+        if (queryStrings.ContainsKey("title"))
+        {
+            FilterMovieDto.Title = queryStrings["title"];
+        }
+
+        if (queryStrings.ContainsKey("intheaters"))
+        {
+            FilterMovieDto.UpcomingReleases = bool.Parse(queryStrings["intheaters"]);
+        }
+
+        if (queryStrings.ContainsKey("upcomingReleases"))
+        {
+            FilterMovieDto.UpcomingReleases = bool.Parse(queryStrings["upcomingReleases"]);
+        }
+
+        if (queryStrings.ContainsKey("page"))
+        {
+            FilterMovieDto.PageNumber = int.Parse(queryStrings["page"]);
+        }
     }
 }

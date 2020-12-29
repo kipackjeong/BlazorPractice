@@ -1,23 +1,24 @@
 ﻿@page "/people"
 @using BlazorPracticeServer.Services
+@using BlazorPracticeServer.Entity.Dtos
+@using BlazorPracticeServer.Components.PersonComp
+<div style="display: flex; flex-direction: column; align-items: center ; text-align:center">
+    <div class="form-group">
+        <a class="btn btn-info" href="person/create">New Person</a>
+    </div>
 
-<h3>PeoplePage</h3>
-
-<div class="form-group">
-    <a class="btn btn-info" href="person/create">New Person</a>
-</div>
-
-@if (People != null)
-{
-    foreach (var person in People)
+    @if (People == null)
     {
-        <a href="/person/detail/@person.Id">
-            <p style="color:white"> @person.Name</p>
-        </a>
-
+        <text>loading...</text>
     }
+    else
+    {
 
-}
+        <Pagination CurrentPage="paginationDto.PageNumber" TotalAmountOfPages="10" Radius="1" SelectedPage="SelectedPage"></Pagination>
+
+        <PeopleList People="People" OnEditClicked="GoToEditPage" OnDeleteClicked="DeletePerson"></PeopleList>
+    }
+</div>
 
 
 @code {
@@ -26,9 +27,35 @@
 
     [Inject]
     public IPersonService PersonService { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    public PaginationDto paginationDto { get; set; } = new PaginationDto() { RecordsPerPage = 5 };
+
+
 
     protected async override Task OnInitializedAsync()
     {
-        People = (await PersonService.RetrieveAllPersonAsync()).ToList();
+        await LoadPeople();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        paginationDto.PageNumber = page;
+        await LoadPeople();
+    }
+
+    private async Task LoadPeople()
+    {
+        People = (await PersonService.RetrieveAllPersonAsync(paginationDto)).ToList();
+    }
+
+    private async Task GoToEditPage(int personId)
+    {
+        NavigationManager.NavigateTo($"/person/detail/{personId}");
+    }
+
+    private async Task DeletePerson(int personId)
+    {
+        await PersonService.DeletePersonAsync(personId);
     }
 }
