@@ -16,15 +16,14 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
                 </iframe>
+
+            </div>
+        </div>
+        <div style="margin: auto; width: 50%; text-align:center">
+            <div>
                 <h3> Genre </h3>
                 <GenreList Genres="Genres"/>
-            </div>
-
-        </div>
-        <div style="margin:auto">
-            <div>
                 <h3>Casting</h3>
-
                 @if (Movie.MoviePeople != null)
                 {
                     foreach (var moviePerson in Movie.MoviePeople)
