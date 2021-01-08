@@ -2,6 +2,8 @@
 @page "/genre/edit/{GenreId:int}/GenreName"
 @using BlazorPracticeServer.Components.GenreComp
 @using BlazorPracticeServer.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize(Roles ="Admin")]
 
 @if (Genre != null)
 {

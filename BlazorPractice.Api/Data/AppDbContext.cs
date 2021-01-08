@@ -1,4 +1,5 @@
 ﻿using BlazorPracticeServer.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorPractice.Api.Data

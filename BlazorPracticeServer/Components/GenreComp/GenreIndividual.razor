@@ -2,7 +2,11 @@
     <a href="movie/search?genreId=@Genre.Id">
         @Genre.Name
     </a>
-    <i class="oi oi-delete" @onclick="@(()=>OnDeleteClicked.InvokeAsync(Genre.Id))"></i>
+    @if (ShowDeleteButton)
+    {
+        <i class="oi oi-delete" @onclick="@(()=>OnDeleteClicked.InvokeAsync(Genre.Id))"></i>
+    }
+
 
 </li>
 
@@ -13,4 +17,6 @@
     public int nthGenre { get; set; }
     [Parameter]
     public EventCallback<int> OnDeleteClicked { get; set; }
+    [Parameter]
+    public bool ShowDeleteButton { get; set; }
 }

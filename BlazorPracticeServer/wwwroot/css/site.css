@@ -89,11 +89,14 @@ p {
     margin-bottom: 10rem;
     display: inline-flex;
     flex-wrap: wrap;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
     .movies-list .individual-movie-container {
         background-color: transparent;
         width: 15%;
+        height: 100%;
     }
 
     .movies-list .movie-poster {
@@ -134,8 +137,9 @@ p {
     width: 100%;
     left: 0;
 }
-
 /*#endregion */
+
+
 /*#region Carousel */
 
 div#carousel {

@@ -7,7 +7,15 @@
     <a class="btn btn-info" href="genre/create">New genre</a>
 </div>
 
-<GenreList Genres="Genres" OnDeleteClicked= "@DeleteGenreAsync"/> 
+<AuthorizeView>
+    <Authorized>
+        <GenreList Genres="Genres" OnDeleteClicked="@DeleteGenreAsync" ShowDeleteButton="true"/>
+    </Authorized>
+    <NotAuthorized>
+        <GenreList Genres="Genres" OnDeleteClicked="@DeleteGenreAsync" ShowDeleteButton="false" />
+    </NotAuthorized>
+</AuthorizeView>
+
 
 
 

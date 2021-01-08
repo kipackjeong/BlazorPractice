@@ -1,6 +1,8 @@
-﻿@page "/person/create" 
+﻿@page "/person/create"
 @using BlazorPracticeServer.Components.PersonComp
 @using BlazorPracticeServer.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize(Roles = "Admin")]
 
 <h3>CreatePersonPage</h3>
 <PersonForm Person="Person" OnValidSubmit="CreatePerson">

@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RESTFulSense.Clients;
 using System;
+using BlazorPracticeServer.Auth;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorPracticeServer
 {
@@ -32,7 +34,7 @@ namespace BlazorPracticeServer
 
             AddServices(services);
 
-            services.AddScoped<IApiBroker, ApiBroker>();
+            services.AddSingleton<IApiBroker, ApiBroker>();
 
             services.AddHttpClient<IRESTFulApiFactoryClient, RESTFulApiFactoryClient>(client =>
             {
@@ -40,6 +42,9 @@ namespace BlazorPracticeServer
                 string apiUrl = localConfigurations.ApiConfigurations.Url;
                 client.BaseAddress = new Uri(apiUrl);
             });
+
+            services.AddAuthorizationCore();
+            services.AddScoped<AuthenticationStateProvider, DummyAuthenticationStateProvider>();
         }
 
         private static void AddServices(IServiceCollection services)

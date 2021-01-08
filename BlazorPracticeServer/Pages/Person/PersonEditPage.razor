@@ -1,7 +1,8 @@
 ﻿@page "/person/edit/{PersonId:int}"
 @using BlazorPracticeServer.Components.PersonComp
 @using BlazorPracticeServer.Services
-
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize(Roles = "Admin")]
 
 @if (Person != null)
 {

@@ -2,11 +2,12 @@
 @using BlazorPracticeServer.Components.MovieComp
 @using BlazorPracticeServer.Models.Arguments
 @using BlazorPracticeServer.Services
-
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize(Roles = "Admin")]
 
 @if (Movie != null)
 {
-    <MovieForm Movie="Movie" OnValidSubmit="CreateMovie" SelectedActors="new List<Person>()"/>
+    <MovieForm Movie="Movie" OnValidSubmit="CreateMovie" SelectedActors="new List<Person>()" />
 }
 else
 {
