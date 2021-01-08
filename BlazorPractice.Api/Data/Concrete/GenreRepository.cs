@@ -1,8 +1,8 @@
 ﻿using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlazorPractice.Api.Data.Concrete
 {
@@ -22,7 +22,7 @@ namespace BlazorPractice.Api.Data.Concrete
         public Genre GetGenreById(int id)
         {
             return _context.Genres
-                .Include(genre=> genre.MovieGenres).ThenInclude(movieGenres=>movieGenres.Movie)
+                .Include(genre => genre.MovieGenres).ThenInclude(movieGenres => movieGenres.Movie)
                 .FirstOrDefault(g => g.Id == id);
         }
 

@@ -5,6 +5,7 @@ using BlazorPractice.Api.Data.Contract;
 using BlazorPractice.Api.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorPractice.Api
 {
@@ -43,11 +45,16 @@ namespace BlazorPractice.Api
 
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AdminIdentityDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         private void AddData(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("AzureMovieDB")));
+            services.AddDbContext<AdminIdentityDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("AzureMovieDB")));
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();

@@ -46,7 +46,7 @@ namespace BlazorPractice.Api.Controllers
         }
 
         [HttpGet("filter")]
-        public async ValueTask<ActionResult<IEnumerable<ReadMovieDto>>> GetAllFilteredMovies([FromQuery]FilterMovieDto filterMovieDto)
+        public async ValueTask<ActionResult<IEnumerable<ReadMovieDto>>> GetAllFilteredMovies([FromQuery] FilterMovieDto filterMovieDto)
         {
             var filteredMovies = _repo.GetAllFilteredMovies(filterMovieDto);
             if (!filteredMovies.Any())

@@ -1,6 +1,6 @@
 ﻿using BlazorPracticeServer.Entity;
-using System.Collections.Generic;
 using BlazorPracticeServer.Entity.Dtos;
+using System.Collections.Generic;
 
 namespace BlazorPractice.Api.Data.Contract
 {

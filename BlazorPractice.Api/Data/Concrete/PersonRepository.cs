@@ -1,9 +1,9 @@
 ﻿using BlazorPractice.Api.Data.Contract;
 using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using BlazorPracticeServer.Entity.Dtos;
 
 namespace BlazorPractice.Api.Data.Concrete
 {

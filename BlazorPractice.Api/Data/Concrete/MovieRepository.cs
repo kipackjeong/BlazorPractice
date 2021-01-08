@@ -87,7 +87,7 @@ namespace BlazorPractice.Api.Data.Concrete
         public IEnumerable<Movie> GetAllMovieByName(string movieName)
         {
             return _context.Movies
-                .Where(movie => movieName != null 
+                .Where(movie => movieName != null
                                 && movie.Title
                                     .ToLower()
                                     .Contains(movieName.ToLower())
