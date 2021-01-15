@@ -43,8 +43,19 @@ namespace BlazorPracticeServer
                 client.BaseAddress = new Uri(apiUrl);
             });
 
+            AddAuthServices(services);
+        }
+
+        private static void AddAuthServices(IServiceCollection services)
+        {
             services.AddAuthorizationCore();
-            services.AddScoped<AuthenticationStateProvider, DummyAuthenticationStateProvider>();
+
+            // tying two services to one instance.
+            services.AddScoped<JWTAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
+            services.AddScoped<ILoginService, JWTAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
         }
 
         private static void AddServices(IServiceCollection services)
@@ -52,6 +63,7 @@ namespace BlazorPracticeServer
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IAccountsService, AccountsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

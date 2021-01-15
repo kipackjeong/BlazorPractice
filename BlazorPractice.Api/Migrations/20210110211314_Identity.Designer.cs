@@ -4,20 +4,132 @@ using BlazorPractice.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BlazorPractice.Api.Migrations.AdminIdentityDb
+namespace BlazorPractice.Api.Migrations
 {
-    [DbContext(typeof(AdminIdentityDbContext))]
-    partial class AdminIdentityDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20210110211314_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Movie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("InTheater")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Poster")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Trailer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MovieGenre", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("MovieGenres");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MoviePerson", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Character")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MovieId", "PersonId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("MoviePeople");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("People");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -215,6 +327,44 @@ namespace BlazorPractice.Api.Migrations.AdminIdentityDb
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MovieGenre", b =>
+                {
+                    b.HasOne("BlazorPracticeServer.Entity.Genre", "Genre")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlazorPracticeServer.Entity.Movie", "Movie")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.MoviePerson", b =>
+                {
+                    b.HasOne("BlazorPracticeServer.Entity.Movie", "Movie")
+                        .WithMany("MoviePeople")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlazorPracticeServer.Entity.Person", "Person")
+                        .WithMany("MoviePeople")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -264,6 +414,23 @@ namespace BlazorPractice.Api.Migrations.AdminIdentityDb
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Genre", b =>
+                {
+                    b.Navigation("MovieGenres");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Movie", b =>
+                {
+                    b.Navigation("MovieGenres");
+
+                    b.Navigation("MoviePeople");
+                });
+
+            modelBuilder.Entity("BlazorPracticeServer.Entity.Person", b =>
+                {
+                    b.Navigation("MoviePeople");
                 });
 #pragma warning restore 612, 618
         }

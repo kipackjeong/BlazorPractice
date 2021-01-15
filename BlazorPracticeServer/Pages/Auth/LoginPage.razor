@@ -1,0 +1,32 @@
+﻿@page "/login"
+@using BlazorPracticeServer.Entity.Dtos
+@using BlazorPracticeServer.Services
+@using BlazorPracticeServer.Auth
+
+<h3>Login</h3>
+<EditForm Model="UserInfo" OnValidSubmit="LoginAccount">
+    <DataAnnotationsValidator />
+    <label>Email address</label>
+    <InputText @bind-Value="UserInfo.Email" />
+    <ValidationMessage For="@(()=> UserInfo.Email)" />
+    <label>Password</label>
+    <InputPassword @bind-Value="UserInfo.Password" />
+    <ValidationMessage For="@(()=> UserInfo.Password)" />
+    <BSButton type="submit" Color="Color.Info">Login</BSButton>
+</EditForm>
+<a href="register" class="nav-link" style="color:white"> Not registered? click to register.</a>
+
+@code
+{
+    [Inject] public IAccountsService AccountsService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public ILoginService LoginService { get; set; }
+
+    public UserInfo UserInfo { get; set; } = new UserInfo();
+    public async Task LoginAccount()
+    {
+        var userToken = await AccountsService.LoginAccountAsync(UserInfo);
+        await LoginService.Login(userToken);
+        NavigationManager.NavigateTo("/");
+    }
+}

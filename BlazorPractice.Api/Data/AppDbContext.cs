@@ -1,9 +1,10 @@
 ﻿using BlazorPracticeServer.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorPractice.Api.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }

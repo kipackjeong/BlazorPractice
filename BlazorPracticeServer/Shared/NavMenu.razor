@@ -14,12 +14,22 @@
             <NavLink href="people">
                 <text id="len3" class="hoverable">People</text>
             </NavLink>
-            <AuthorizeView Roles="Admin">
+            <AuthorizeView Roles="admin">
+                <NavLink href="movie/create">
+                    <text id="len4" class="hoverable">Create Movie</text>
+                </NavLink>
+            </AuthorizeView>
+            <AuthorizeView>
                 <Authorized>
-                    <NavLink href="movie/create">
-                        <text id="len4" class="hoverable">Create Movie</text>
+                    <NavLink href="logout">
+                        <text id="len4" class="hoverable">Logout</text>
                     </NavLink>
                 </Authorized>
+                <NotAuthorized>
+                    <NavLink href="login">
+                        <text id="len4" class="hoverable">Login</text>
+                    </NavLink>
+                </NotAuthorized>
             </AuthorizeView>
         </ul>
     </div>

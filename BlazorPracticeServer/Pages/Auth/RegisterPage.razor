@@ -1,0 +1,33 @@
+﻿@page "/register"
+@using BlazorPracticeServer.Entity.Dtos
+@using BlazorPracticeServer.Services
+<EditForm Model="UserInfo" OnValidSubmit="RegisterAccount">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <label> Email Address</label>
+        <InputText class="form-control" @bind-Value="UserInfo.Email"/>
+        <ValidationMessage For="(()=> UserInfo.Email)"/>
+    </div>
+    <div class="form-group">
+        <label> Password</label>
+        <InputPassword class="form-control" @bind-Value="@UserInfo.Password"/>
+        <ValidationMessage For="(()=> UserInfo.Password)"/>
+    </div>
+    <p> @UserInfo.Password </p>
+    <BSButton Color="Color.Info" type="submit"></BSButton>
+</EditForm>
+
+@if (UserToken != null)
+{
+    <p> @UserToken.Token </p>
+}
+@code {
+    [Inject]
+    public IAccountsService AccountsService { get; set; }
+    public UserInfo UserInfo { get; set; } = new UserInfo();
+    public UserToken UserToken { get; set; }
+    public async Task RegisterAccount()
+    {
+        var token = await AccountsService.RegisterAccountAsync(UserInfo);
+    }
+}

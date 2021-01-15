@@ -13,7 +13,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlazorPractice.Api
 {
@@ -42,19 +45,29 @@ namespace BlazorPractice.Api
             services.AddControllers().AddNewtonsoftJson(s =>
             {
                 s.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
-
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<AdminIdentityDbContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
+                        ClockSkew = TimeSpan.Zero
+                    }
+                ); 
         }
 
         private void AddData(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("AzureMovieDB")));
-            services.AddDbContext<AdminIdentityDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("AzureMovieDB")));
+            services.AddDbContext<AppDbContext>(option =>
+                option.UseSqlServer(Configuration.GetConnectionString("AzureMovieDB")));
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
@@ -73,7 +86,7 @@ namespace BlazorPractice.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

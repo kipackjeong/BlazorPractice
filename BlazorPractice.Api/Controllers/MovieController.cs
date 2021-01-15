@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorPractice.Api.Controllers
 {
@@ -26,7 +28,10 @@ namespace BlazorPractice.Api.Controllers
             _mapper = mapper;
             _fileStorageService = fileStorageService;
         }
+
+        
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async ValueTask<ActionResult<AllMoviesDto>> GetAllMovies()
         {
             var allMovieDto = _repo.GetAllMovie();

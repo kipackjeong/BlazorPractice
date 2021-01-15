@@ -1,0 +1,15 @@
+﻿@page "/logout" 
+@using BlazorPracticeServer.Services
+@using BlazorPracticeServer.Auth
+<h3>LogoutPage</h3>
+
+@code {
+    [Inject] public ILoginService LoginService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoginService.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+}
