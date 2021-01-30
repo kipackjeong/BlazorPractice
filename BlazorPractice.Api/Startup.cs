@@ -47,9 +47,11 @@ namespace BlazorPractice.Api
                 s.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                     options.TokenValidationParameters = new TokenValidationParameters()
@@ -71,6 +73,7 @@ namespace BlazorPractice.Api
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IRatingsRepository, RatingsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

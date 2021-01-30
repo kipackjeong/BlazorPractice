@@ -51,6 +51,7 @@ namespace BlazorPractice.Api.Controllers
         {
             var user = new IdentityUser {UserName = model.Email, Email = model.Email};
             var result = await _userManager.CreateAsync(user, model.Password);
+
             if (result.Succeeded)
             {
                 return await BuildToken(model);

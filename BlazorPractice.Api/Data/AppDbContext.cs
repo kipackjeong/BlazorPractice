@@ -1,4 +1,5 @@
 ﻿using BlazorPracticeServer.Entity;
+using BlazorPracticeServer.Entity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace BlazorPractice.Api.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Person> People { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
         public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<MoviePerson> MoviePeople { get; set; }
 
